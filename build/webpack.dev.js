@@ -1,6 +1,7 @@
 const path = require('path');
 const { merge } = require('webpack-merge');
 const baseConfig = require('./webpack.base.js');
+console.log('env', process.env.REACT_APP_API_URL);
 
 // 合并公共配置,并添加开发环境配置
 module.exports = merge(baseConfig, {

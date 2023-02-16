@@ -1,4 +1,5 @@
 const path = require('path');
+const Dotenv = require('dotenv-webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
@@ -8,7 +9,7 @@ module.exports = {
     filename: 'static/js/[name].[chunkhash:8].js',
     path: path.join(__dirname, '../dist'),
     clean: true,
-    publicPath: process.env.REACT_PUBLIC_PATH,
+    publicPath: '/',
   },
   resolve: {
     alias: {
@@ -68,8 +69,14 @@ module.exports = {
     ],
   },
   plugins: [
+    new Dotenv({
+      path: `./.env.${process.env.NODE_ENV}`,
+    }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, '../public/index.html'),
+      favicon: './public/favicon.ico',
+      filename: 'index.html',
+      manifest: './public/manifest.json',
       inject: true,
     }),
     new ReactRefreshWebpackPlugin(), // 热更新插件
