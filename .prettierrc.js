@@ -1,7 +1,7 @@
 module.exports = {
   endOfLine: 'auto',
   // 书写宽度
-  printWidth: 80,
+  printWidth: 100,
   // 语句末尾打印分号
   semi: true,
   // 使用单引号
