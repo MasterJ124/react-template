@@ -15,5 +15,11 @@ module.exports = merge(baseConfig, {
     static: {
       directory: path.join(__dirname, '../public'),
     },
+    proxy: {
+      '/api': {
+        target: 'http://kolbiz.api.test.netjoy.com',
+        pathRewrite: { '^/api': '' },
+      },
+    },
   },
 });
