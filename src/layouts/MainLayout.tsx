@@ -8,8 +8,7 @@ const MainLayout: FC = () => {
   return (
     <Layout>
       <Header className="header">
-        <div className="logo" />
-        运营管理
+        <div style={{ color: '#FFF' }}>运营管理</div>
       </Header>
       <Layout>
         <Sider width={200} style={{ background: '#FFF' }}>
