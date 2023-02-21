@@ -12,6 +12,7 @@ import NoFoundPage from '@/pages/404';
 // page
 const Home = lazy(() => import('@/pages/home'));
 const Login = lazy(() => import('@/pages/login'));
+const User = lazy(() => import('@/pages/user'));
 
 // 上层加载
 const withLoadingComponent = (element: JSX.Element) => {
@@ -33,6 +34,10 @@ const routes = [
     element: <MainLayout />,
     children: [
       { path: '*', element: <Navigate to="/404" /> },
+      {
+        path: '/user',
+        element: withLoadingComponent(<User />),
+      },
       {
         path: '/404',
         element: <NoFoundPage />,
