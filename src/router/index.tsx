@@ -1,5 +1,7 @@
 import React, { lazy } from 'react';
 import { Navigate, useRoutes } from 'react-router-dom';
+// 权限层
+// import RequireAuth from './auth';
 
 // layout
 import MainLayout from '@/layouts/MainLayout';
