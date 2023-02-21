@@ -19,6 +19,7 @@ module.exports = merge(baseConfig, {
       '/api': {
         target: 'http://kolbiz.api.test.netjoy.com',
         pathRewrite: { '^/api': '' },
+        changeOrigin: true,
       },
     },
   },
