@@ -27,7 +27,7 @@ const Home: FC = () => {
           <Form>
             {current === 0 && (
               <div>
-                <Form.Item>
+                <Form.Item name="mobile" rules={[{ required: true, message: '请输入手机号码' }]}>
                   <Input size="large" placeholder="请输入您的手机号码" />
                 </Form.Item>
                 <Form.Item>
@@ -35,8 +35,7 @@ const Home: FC = () => {
                     <Col span={15}>
                       <Form.Item
                         name="captcha"
-                        noStyle
-                        rules={[{ required: true, message: 'Please input the captcha you got!' }]}
+                        rules={[{ required: true, message: '请输入验证码' }]}
                       >
                         <Input size="large" placeholder="验证码" />
                       </Form.Item>
@@ -50,10 +49,10 @@ const Home: FC = () => {
             )}
             {current === 1 && (
               <div>
-                <Form.Item>
+                <Form.Item name="user" rules={[{ required: true, message: '请输入账号' }]}>
                   <Input size="large" placeholder="请输入您的账号" />
                 </Form.Item>
-                <Form.Item>
+                <Form.Item name="password" rules={[{ required: true, message: '请输入密码' }]}>
                   <Input size="large" type="password" placeholder="输入您的密码" />
                 </Form.Item>
               </div>
