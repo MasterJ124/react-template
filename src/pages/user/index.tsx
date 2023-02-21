@@ -1,13 +1,14 @@
 import type { FC } from 'react';
 import { Form, Input, Button, Row, Col } from 'antd';
 import '@/pages/login/index.less';
+import UserTable from './table';
 
 const Home: FC = () => {
   return (
     <div className="user-container">
       <div className="form-container">
         <h4>用户管理</h4>
-        <Form labelCol={{ span: 6 }} wrapperCol={{ span: 17 }}>
+        <Form labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
           <Row gutter={12}>
             <Col span={6}>
               <Form.Item name="mobile" label="手机号码">
@@ -48,7 +49,7 @@ const Home: FC = () => {
             >
               <Button
                 style={{
-                  marginRight: '10px',
+                  marginRight: '16px',
                 }}
               >
                 重置
@@ -57,6 +58,8 @@ const Home: FC = () => {
             </Col>
           </Row>
         </Form>
+        <h4>用户管理列表</h4>
+        <UserTable></UserTable>
       </div>
     </div>
   );
