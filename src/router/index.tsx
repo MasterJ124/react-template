@@ -9,6 +9,7 @@ import NoFoundPage from '@/pages/404';
 
 // page
 const Home = lazy(() => import('@/pages/home'));
+const Login = lazy(() => import('@/pages/login'));
 
 // 上层加载
 const withLoadingComponent = (element: JSX.Element) => {
@@ -20,6 +21,10 @@ const routes = [
   {
     path: '/home',
     element: withLoadingComponent(<Home />),
+  },
+  {
+    path: '/login',
+    element: withLoadingComponent(<Login />),
   },
   {
     path: '/',
