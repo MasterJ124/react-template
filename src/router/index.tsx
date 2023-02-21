@@ -8,11 +8,12 @@ import MainLayout from '@/layouts/MainLayout';
 // spin
 import Spinner from '@/components/spinner';
 import NoFoundPage from '@/pages/404';
+import Login from '@/pages/login';
 
 // page
 const Home = lazy(() => import('@/pages/home'));
-const Login = lazy(() => import('@/pages/login'));
 const User = lazy(() => import('@/pages/user'));
+const Staff = lazy(() => import('@/pages/staff'));
 
 // 上层加载
 const withLoadingComponent = (element: JSX.Element) => {
@@ -37,6 +38,10 @@ const routes = [
       {
         path: '/user',
         element: withLoadingComponent(<User />),
+      },
+      {
+        path: '/staff',
+        element: withLoadingComponent(<Staff />),
       },
       {
         path: '/404',
