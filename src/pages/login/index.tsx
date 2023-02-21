@@ -3,11 +3,18 @@ import { useState } from 'react';
 import { Form, Input, Button, Row, Col } from 'antd';
 import logo from '@/assets/images/logo.png';
 import '@/pages/login/index.less';
+import { login, smsSend } from '@/api/login';
 
 const Home: FC = () => {
   const [current, setCurrent] = useState(0);
   const setCurrentFn = (num: number) => {
     setCurrent(num);
+  };
+  const getCode = () => {
+    smsSend({
+      phone: '15875555548',
+      type: 'login',
+    }).then((res) => {});
   };
   return (
     <div className="login-container">
@@ -41,7 +48,9 @@ const Home: FC = () => {
                       </Form.Item>
                     </Col>
                     <Col span={8}>
-                      <Button size="large">获取验证码</Button>
+                      <Button size="large" onClick={() => getCode()}>
+                        获取验证码
+                      </Button>
                     </Col>
                   </Row>
                 </Form.Item>
