@@ -1,20 +1,82 @@
 import type { FC } from 'react';
 import { useState } from 'react';
-import { Form, Input, Button, Row, Col } from 'antd';
+import { Form, Input, Button, Row, Col, message } from 'antd';
 import logo from '@/assets/images/logo.png';
 import '@/pages/login/index.less';
 import { login, smsSend } from '@/api/login';
 
 const Home: FC = () => {
   const [current, setCurrent] = useState(0);
-  const setCurrentFn = (num: number) => {
-    setCurrent(num);
+  const [codeText, setCodeText] = useState('获取验证码');
+  const [btnDisabled, setBtnDisabled] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [form] = Form.useForm();
+  const [messageApi, contextHolder] = message.useMessage();
+  const getCode = async () => {
+    try {
+      const values = await form.validateFields(['mobile']);
+      setBtnDisabled(true);
+      smsSend({
+        phone: values.mobile,
+        type: 'login',
+      }).then((res) => {
+        if (res.code === 0) {
+          setTimeFn();
+          messageApi.open({
+            type: 'success',
+            content: '验证码发送成功',
+          });
+        } else {
+          setBtnDisabled(false);
+          messageApi.open({
+            type: 'error',
+            content: res.message,
+          });
+        }
+      });
+    } catch (errorInfo) {
+      console.log('Failed:', errorInfo);
+    }
   };
-  const getCode = () => {
-    smsSend({
-      phone: '15875555548',
-      type: 'login',
-    }).then((res) => {});
+  const setTimeFn = () => {
+    let num = 60;
+    const timer = setInterval(() => {
+      setCodeText(`${--num}s`);
+      if (num === 0) {
+        clearInterval(timer);
+        setCodeText(`获取验证码`);
+        setBtnDisabled(false);
+      }
+    }, 1000);
+  };
+  const onFinish = (values: any) => {
+    const params: any = {
+      channel: 7,
+      source: 2,
+    };
+    if (current === 0) {
+      params.username = values.mobile;
+      params.password = values.captcha;
+      params.type = 4;
+    } else {
+      params.username = values.user;
+      params.password = values.password;
+      params.type = 1;
+    }
+    setLoading(true);
+    login(params)
+      .then((res) => {
+        if (res.code === 0) {
+        } else {
+          messageApi.open({
+            type: 'error',
+            content: res.message,
+          });
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
   return (
     <div className="login-container">
@@ -24,16 +86,20 @@ const Home: FC = () => {
       <div className="content">
         <div className="form-container">
           <div className="tabs">
-            <a onClick={() => setCurrentFn(0)} className={current === 0 ? 'active' : ''}>
+            <a onClick={() => setCurrent(0)} className={current === 0 ? 'active' : ''}>
               手机登录
             </a>
-            <a onClick={() => setCurrentFn(1)} className={current === 1 ? 'active' : ''}>
+            <a onClick={() => setCurrent(1)} className={current === 1 ? 'active' : ''}>
               密码登录
             </a>
           </div>
-          <Form>
+          <Form onFinish={onFinish} form={form}>
             {current === 0 && (
-              <div>
+              <div
+                style={{
+                  marginBottom: '24px',
+                }}
+              >
                 <Form.Item name="mobile" rules={[{ required: true, message: '请输入手机号码' }]}>
                   <Input size="large" placeholder="请输入您的手机号码" />
                 </Form.Item>
@@ -48,8 +114,16 @@ const Home: FC = () => {
                       </Form.Item>
                     </Col>
                     <Col span={8}>
-                      <Button size="large" onClick={() => getCode()}>
-                        获取验证码
+                      {contextHolder}
+                      <Button
+                        size="large"
+                        onClick={() => getCode()}
+                        disabled={btnDisabled}
+                        style={{
+                          width: '112px',
+                        }}
+                      >
+                        {codeText}
                       </Button>
                     </Col>
                   </Row>
@@ -57,7 +131,11 @@ const Home: FC = () => {
               </div>
             )}
             {current === 1 && (
-              <div>
+              <div
+                style={{
+                  marginBottom: '48px',
+                }}
+              >
                 <Form.Item name="user" rules={[{ required: true, message: '请输入账号' }]}>
                   <Input size="large" placeholder="请输入您的账号" />
                 </Form.Item>
@@ -67,7 +145,7 @@ const Home: FC = () => {
               </div>
             )}
             <Form.Item>
-              <Button size="large" type="primary" htmlType="submit" block>
+              <Button size="large" loading={loading} type="primary" htmlType="submit" block>
                 登录
               </Button>
             </Form.Item>
