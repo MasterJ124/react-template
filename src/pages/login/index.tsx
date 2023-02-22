@@ -4,6 +4,9 @@ import { Form, Input, Button, Row, Col, message } from 'antd';
 import logo from '@/assets/images/logo.png';
 import '@/pages/login/index.less';
 import { login, smsSend } from '@/api/login';
+import { ACCESS_TOKEN } from '@/utils/config';
+import { useNavigate } from 'react-router-dom';
+import ls from '@/utils/Storage';
 
 const Home: FC = () => {
   const [current, setCurrent] = useState(0);
@@ -11,6 +14,7 @@ const Home: FC = () => {
   const [btnDisabled, setBtnDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
+  const history = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
   const getCode = async () => {
     try {
@@ -67,6 +71,9 @@ const Home: FC = () => {
     login(params)
       .then((res) => {
         if (res.code === 0) {
+          ls.set(ACCESS_TOKEN, res.data.token);
+          ls.set('userInfo', res.data);
+          history('/user');
         } else {
           messageApi.open({
             type: 'error',
