@@ -1,8 +1,8 @@
 import type { FC } from 'react';
-import { Form, Input, Button, Row, Col, message, Select } from 'antd';
+import { Form, Input, Button, Row, Col, message, Select, Table, Pagination } from 'antd';
 import { useState } from 'react';
+import type { PaginationProps } from 'antd';
 import '@/pages/login/index.less';
-import UserTable from './table';
 import { getMerchantList } from '@/api/merchant';
 import { MERCHANT_TYPE, AUDIT_STATUS, MERCHANT_STATUS } from '@/utils/config';
 
@@ -10,9 +10,64 @@ const Home: FC = () => {
   const [form] = Form.useForm();
   const [list, setList] = useState([]);
   const [messageApi, contextHolder] = message.useMessage();
-  const search = () => {
+  const [total, setTotal] = useState(0);
+  const [current, setCurrent] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const columns = [
+    {
+      title: 'ID',
+      dataIndex: 'id',
+      key: 'id',
+      render: (text, record: any) => <p>{record.company_info.id}</p>,
+    },
+    {
+      title: '公司名称',
+      key: 'title',
+      render: (text, record: any) => <p>{record.company_info.title}</p>,
+    },
+    {
+      title: '统一社会信用代码',
+      key: 'title',
+      render: (text, record: any) => <p>{record.company_info.cert_code}</p>,
+    },
+    {
+      title: '营业期限',
+      key: 'title',
+      render: (text, record: any) => (
+        <p>
+          {record.company_info.company_end_at
+            ? record.company_info.company_start_at + '-' + record.company_info.company_end_at
+            : '长期'}
+        </p>
+      ),
+    },
+    {
+      title: '审核状态',
+      key: 'status',
+      render: (text, record: any) => <p>{record.status}</p>,
+    },
+    {
+      title: '商户状态',
+      key: 'company_status',
+      render: (text, record: any) => <p>{record.company_info.status}</p>,
+    },
+    {
+      title: '经营',
+      key: 'address',
+      render: (text, record: any) => <p>{record.company_info.address}</p>,
+    },
+    {
+      title: '操作',
+      key: 'opea',
+      render: (text, record: any) => <p>{record.status}</p>,
+    },
+  ];
+  const search = (page: number, page_size: number) => {
     const data = form.getFieldsValue();
-    const params = Object.assign({ category: 1 }, data);
+    const params = Object.assign(
+      { category: 1, page: page || current, page_size: page_size || pageSize },
+      data,
+    );
     getMerchantList(params).then((res) => {
       const { code, data, message } = res;
       if (code !== 0) {
@@ -22,11 +77,16 @@ const Home: FC = () => {
         });
       }
       setList(data?.lists || []);
+      setTotal(data?.paginate?.total || 0);
     });
+  };
+  const showTotal: PaginationProps['showTotal'] = (total) => `共 ${total} 项数据`;
+  const onShowSizeChange = async (current: number, size: number) => {
+    search(current, size);
   };
   const reset = () => {
     form.resetFields();
-    search();
+    search(1, 10);
   };
   return (
     <div className="user-container">
@@ -83,14 +143,31 @@ const Home: FC = () => {
               >
                 重置
               </Button>
-              <Button type="primary" onClick={search}>
+              <Button type="primary" onClick={() => search(1, pageSize)}>
                 查询
               </Button>
             </Col>
           </Row>
         </Form>
         <h4>企业商户管理列表</h4>
-        <UserTable list={list}></UserTable>
+        <Table dataSource={list} columns={columns} pagination={false} />
+        <div
+          style={{
+            textAlign: 'right',
+            display: 'flex',
+            justifyContent: 'flex-end',
+            marginTop: '20px',
+          }}
+        >
+          <Pagination
+            current={current}
+            total={total}
+            showTotal={showTotal}
+            onShowSizeChange={onShowSizeChange}
+            showSizeChanger
+            showQuickJumper
+          />
+        </div>
         {contextHolder}
       </div>
     </div>
