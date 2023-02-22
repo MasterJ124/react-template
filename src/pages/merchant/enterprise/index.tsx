@@ -90,7 +90,7 @@ const Home: FC = () => {
   };
   return (
     <div className="user-container">
-      <div className="form-container">
+      <div className="containerCard">
         <h4>企业商户管理</h4>
         <Form form={form} labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
           <Row gutter={12}>
@@ -149,6 +149,8 @@ const Home: FC = () => {
             </Col>
           </Row>
         </Form>
+      </div>
+      <div className="containerCard">
         <h4>企业商户管理列表</h4>
         <Table dataSource={list} columns={columns} pagination={false} />
         <div

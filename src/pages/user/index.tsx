@@ -6,7 +6,7 @@ import UserTable from './table';
 const User: FC = () => {
   return (
     <div className="user-container">
-      <div className="form-container">
+      <div className="containerCard">
         <h4>用户管理</h4>
         <Form labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
           <Row gutter={12}>
@@ -58,6 +58,8 @@ const User: FC = () => {
             </Col>
           </Row>
         </Form>
+      </div>
+      <div className="containerCard">
         <h4>用户管理列表</h4>
         <UserTable></UserTable>
       </div>
