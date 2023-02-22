@@ -1,8 +1,8 @@
 import React, { lazy } from 'react';
 import { Navigate, useRoutes } from 'react-router-dom';
+
 // 权限层
 // import RequireAuth from './auth';
-
 // layout
 import MainLayout from '@/layouts/MainLayout';
 // spin
@@ -35,7 +35,6 @@ const routes = [
     path: '/',
     element: <MainLayout />,
     children: [
-      { path: '*', element: <Navigate to="/404" /> },
       {
         path: '/user',
         element: withLoadingComponent(<User />),
@@ -44,6 +43,7 @@ const routes = [
         path: '/staff',
         element: withLoadingComponent(<Staff />),
       },
+      { path: '*', element: <Navigate to="/404" /> },
       {
         path: '/enterprise/list',
         element: withLoadingComponent(<Enterprise />),
