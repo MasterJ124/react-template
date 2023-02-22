@@ -19,8 +19,7 @@ const MainLayout: FC = () => {
             style={{
               padding: 24,
               margin: 0,
-              minHeight: 280,
-              background: '#FFF',
+              minHeight: 400,
             }}
           >
             <Outlet />
