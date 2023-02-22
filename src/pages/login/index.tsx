@@ -8,7 +8,7 @@ import { ACCESS_TOKEN } from '@/utils/config';
 import { useNavigate } from 'react-router-dom';
 import ls from '@/utils/Storage';
 
-const Home: FC = () => {
+const Login: FC = () => {
   const [current, setCurrent] = useState(0);
   const [codeText, setCodeText] = useState('获取验证码');
   const [btnDisabled, setBtnDisabled] = useState(false);
@@ -163,4 +163,4 @@ const Home: FC = () => {
   );
 };
 
-export default Home;
+export default Login;

@@ -14,6 +14,7 @@ import Login from '@/pages/login';
 const Home = lazy(() => import('@/pages/home'));
 const User = lazy(() => import('@/pages/user'));
 const Staff = lazy(() => import('@/pages/staff'));
+const Enterprise = lazy(() => import('@/pages/merchant/enterprise'));
 
 // 上层加载
 const withLoadingComponent = (element: JSX.Element) => {
@@ -42,6 +43,10 @@ const routes = [
       {
         path: '/staff',
         element: withLoadingComponent(<Staff />),
+      },
+      {
+        path: '/enterprise/list',
+        element: withLoadingComponent(<Enterprise />),
       },
       {
         path: '/404',

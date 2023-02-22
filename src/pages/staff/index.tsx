@@ -3,7 +3,7 @@ import { Form, Input, Button, Row, Col } from 'antd';
 import '@/pages/login/index.less';
 import UserTable from './table';
 
-const Home: FC = () => {
+const Staff: FC = () => {
   return (
     <div className="user-container">
       <div className="form-container">
@@ -49,4 +49,4 @@ const Home: FC = () => {
   );
 };
 
-export default Home;
+export default Staff;
