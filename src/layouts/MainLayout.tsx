@@ -6,7 +6,7 @@ const { Header, Content, Sider } = Layout;
 
 const MainLayout: FC = () => {
   return (
-    <Layout>
+    <Layout style={{ height: '100%' }}>
       <Header className="header">
         <div style={{ color: '#FFF' }}>运营管理</div>
       </Header>
@@ -14,7 +14,7 @@ const MainLayout: FC = () => {
         <Sider width={200} style={{ background: '#FFF' }}>
           <Menu mode="inline" style={{ height: '100%', borderRight: 0 }} />
         </Sider>
-        <Layout style={{ padding: '0 24px 24px' }}>
+        <Layout style={{ padding: '16px 24px' }}>
           <Content
             style={{
               padding: 24,

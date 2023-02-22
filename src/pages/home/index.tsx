@@ -4,7 +4,7 @@ import { setUserToken } from '@/features/userInfoSlice';
 import { Button } from 'antd';
 
 import logo from '@/logo.svg';
-import '@/App.css';
+import '@/style/App.css';
 
 const Home: FC = () => {
   const dispatch = useAppDispatch();
