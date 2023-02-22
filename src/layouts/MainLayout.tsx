@@ -17,8 +17,6 @@ const MainLayout: FC = () => {
         <Layout style={{ padding: '16px 24px' }}>
           <Content
             style={{
-              padding: 24,
-              margin: 0,
               minHeight: 400,
             }}
           >
