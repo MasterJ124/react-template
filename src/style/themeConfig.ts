@@ -6,7 +6,7 @@ export const themeConfig = {
   },
   components: {
     Button: {
-      borderRadius: 4,
+      borderRadius: 2,
       borderRadiusLG: 4,
     },
   },

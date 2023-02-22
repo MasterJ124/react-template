@@ -7,6 +7,8 @@ import { login, smsSend } from '@/api/login';
 import { ACCESS_TOKEN } from '@/utils/config';
 import { useNavigate } from 'react-router-dom';
 import ls from '@/utils/Storage';
+import { useAppDispatch } from '@/app/hooks';
+import { setUserToken, setUserInfo } from '@/features/userInfoSlice';
 
 const Login: FC = () => {
   const [current, setCurrent] = useState(0);
@@ -16,6 +18,8 @@ const Login: FC = () => {
   const [form] = Form.useForm();
   const history = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
+  const dispatch = useAppDispatch();
+
   const getCode = async () => {
     try {
       const values = await form.validateFields(['mobile']);
@@ -70,16 +74,14 @@ const Login: FC = () => {
     setLoading(true);
     login(params)
       .then((res) => {
-        if (res.code === 0) {
-          ls.set(ACCESS_TOKEN, res.data.token);
-          ls.set('userInfo', res.data);
-          history('/user');
-        } else {
-          messageApi.open({
-            type: 'error',
-            content: res.message,
-          });
+        const { code, data, message } = res;
+        if (code !== 0) {
+          messageApi.error(message);
         }
+        ls.set(ACCESS_TOKEN, data.token);
+        dispatch(setUserToken(data.token));
+        dispatch(setUserInfo(data));
+        history('/user');
       })
       .finally(() => {
         setLoading(false);

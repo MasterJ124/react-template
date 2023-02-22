@@ -1,4 +1,4 @@
-import ls from "./Storage";
+import ls from './Storage';
 
 export function clearUserInfo() {
   ls.clear();
