@@ -9,12 +9,17 @@ import { MERCHANT_TYPE, AUDIT_STATUS, MERCHANT_STATUS } from '@/utils/config';
 const Home: FC = () => {
   const [form] = Form.useForm();
   const [list, setList] = useState([]);
+  const [messageApi, contextHolder] = message.useMessage();
   const search = () => {
     const data = form.getFieldsValue();
-    getMerchantList({ category: 1 }).then((res) => {
+    const params = Object.assign({ category: 1 }, data);
+    getMerchantList(params).then((res) => {
       const { code, data, message } = res;
       if (code !== 0) {
-        message.error(message);
+        messageApi.open({
+          type: 'error',
+          content: message,
+        });
       }
       setList(data?.lists || []);
     });
@@ -86,6 +91,7 @@ const Home: FC = () => {
         </Form>
         <h4>企业商户管理列表</h4>
         <UserTable list={list}></UserTable>
+        {contextHolder}
       </div>
     </div>
   );
