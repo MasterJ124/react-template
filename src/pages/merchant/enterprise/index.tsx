@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import { Form, Input, Button, Row, Col, message, Select, Table, Pagination } from 'antd';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { PaginationProps } from 'antd';
 import '@/pages/login/index.less';
 import { getMerchantList } from '@/api/merchant';
@@ -82,12 +82,19 @@ const Home: FC = () => {
   };
   const showTotal: PaginationProps['showTotal'] = (total) => `共 ${total} 项数据`;
   const onShowSizeChange = async (current: number, size: number) => {
+    setCurrent(current);
+    setPageSize(size);
     search(current, size);
   };
   const reset = () => {
     form.resetFields();
+    setCurrent(1);
+    setPageSize(10);
     search(1, 10);
   };
+  useEffect(() => {
+    search(current, pageSize);
+  }, []);
   return (
     <div className="user-container">
       <div className="containerCard">
@@ -152,7 +159,12 @@ const Home: FC = () => {
       </div>
       <div className="containerCard">
         <h4>企业商户管理列表</h4>
-        <Table dataSource={list} columns={columns} pagination={false} />
+        <Table
+          dataSource={list}
+          rowKey={(record) => record.id}
+          columns={columns}
+          pagination={false}
+        />
         <div
           style={{
             textAlign: 'right',
