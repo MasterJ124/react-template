@@ -4,6 +4,8 @@ import { ACCESS_TOKEN } from './config';
 import ls from './Storage';
 import { clearUserInfo } from './util';
 
+import { logout } from '@/api/login';
+
 // 创建 axios 实例   withCredentials: true,
 const service = axios.create({
   // API 请求的默认前缀
@@ -42,10 +44,8 @@ service.interceptors.request.use((config) => {
       description: '请检查网络',
     });
   }
-  if (!config?.headers?.Authorization) {
-    const token = ls.get(ACCESS_TOKEN);
-    (config.headers as AxiosRequestHeaders)['X-Token'] = token;
-  }
+  const token = ls.get(ACCESS_TOKEN);
+  if (token) (config.headers as AxiosRequestHeaders)['X-Token'] = token;
   return config;
 }, errorHandler);
 
@@ -62,6 +62,10 @@ service.interceptors.response.use((res: AxiosResponse<any>) => {
       description: '身份已失效，请重新登录',
     });
     // 登出操作
+    logout().then(() => {
+      clearUserInfo();
+      window.location.replace('/login');
+    });
   } else {
     hasExist = false;
   }

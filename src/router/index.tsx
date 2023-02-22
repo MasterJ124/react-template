@@ -2,7 +2,7 @@ import React, { lazy } from 'react';
 import { Navigate, useRoutes } from 'react-router-dom';
 
 // 权限层
-// import RequireAuth from './auth';
+import RequireAuth from './auth';
 // layout
 import MainLayout from '@/layouts/MainLayout';
 // spin
@@ -17,7 +17,7 @@ const Staff = lazy(() => import('@/pages/staff'));
 const Enterprise = lazy(() => import('@/pages/merchant/enterprise'));
 
 // 上层加载
-const withLoadingComponent = (element: JSX.Element) => {
+const lazyComponent = (element: JSX.Element) => {
   return <React.Suspense fallback={<Spinner />}>{element}</React.Suspense>;
 };
 
@@ -25,11 +25,11 @@ const routes = [
   { path: '/', element: <Navigate to="/home" /> },
   {
     path: '/home',
-    element: withLoadingComponent(<Home />),
+    element: lazyComponent(<Home />),
   },
   {
     path: '/login',
-    element: withLoadingComponent(<Login />),
+    element: lazyComponent(<Login />),
   },
   {
     path: '/',
@@ -37,17 +37,17 @@ const routes = [
     children: [
       {
         path: '/user',
-        element: withLoadingComponent(<User />),
+        element: <RequireAuth>{lazyComponent(<User />)}</RequireAuth>,
+      },
+      {
+        path: '/enterprise/list',
+        element: <RequireAuth>{lazyComponent(<Enterprise />)}</RequireAuth>,
       },
       {
         path: '/staff',
-        element: withLoadingComponent(<Staff />),
+        element: <RequireAuth>{lazyComponent(<Staff />)}</RequireAuth>,
       },
       { path: '*', element: <Navigate to="/404" /> },
-      {
-        path: '/enterprise/list',
-        element: withLoadingComponent(<Enterprise />),
-      },
       {
         path: '/404',
         element: <NoFoundPage />,
