@@ -1,14 +1,16 @@
 import { message } from 'antd';
 import ls from './Storage';
-import { COMPANY_ID } from '@/utils/config';
+import { ACCESS_TOKEN, COMPANY_ID } from '@/utils/config';
 import { store } from '@/app/store';
 import { setUserInfo } from '@/features/userInfoSlice';
 // api
 import { getUserInfo } from '@/api/login';
 
-// // 获取用户信息
+// 获取用户信息
 export function fetchUserInfo() {
   try {
+    const token = ls.get(ACCESS_TOKEN);
+    if (!token) return;
     getUserInfo()
       .then((res) => {
         const { data, code, message } = res;
