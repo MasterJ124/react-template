@@ -19,3 +19,8 @@ export async function memberSwitch(parameter: any): Promise<any> {
 export async function getRoleList(parameter?: any): Promise<any> {
   return $get(`/role/getRoleList`, parameter);
 }
+
+// 分配角色
+export async function roleAssign(parameter: any): Promise<any> {
+  return $post(`/role/assign`, parameter);
+}

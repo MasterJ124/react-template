@@ -17,7 +17,9 @@ import type { ColumnsType } from 'antd/es/table';
 import styles from './index.module.less';
 
 // api
-import { getMemberList, addMember, memberSwitch } from '@/api/staff';
+import { getMemberList, memberSwitch } from '@/api/staff';
+// 组件
+import AddModal from './components/AddModal';
 
 interface PageInfo {
   current: number;
@@ -29,25 +31,27 @@ const Staff: FC = () => {
   const [messageApi, contextHolder] = $message.useMessage();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
+  const [addModalVisible, setAddModalVisible] = useState(false);
   const [dataList, setDataList] = useState([]);
   const [pageInfo, setPageInfo] = useState<PageInfo>({
     current: 1,
     pageSize: 10,
     total: 0,
   });
-  const layout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 16 },
+  const formItemLayout = {
+    labelCol: {
+      span: 8,
+    },
+    wrapperCol: {
+      span: 16,
+    },
+  };
+  const grid = {
     gutter: 12,
     colSpan: 6,
   };
 
   const columns: ColumnsType<any> = [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      width: 80,
-    },
     {
       title: '用户名称',
       dataIndex: 'nickname',
@@ -95,21 +99,16 @@ const Staff: FC = () => {
     },
   ];
 
-  function onSearch() {
-    const { current, pageSize } = pageInfo;
-    getList(current, pageSize);
-  }
-
   function initSearch() {
+    setPageInfo({
+      ...pageInfo,
+      current: 1,
+    });
     getList(1, pageInfo.pageSize);
   }
 
   function reset() {
     form.resetFields();
-    setPageInfo({
-      ...pageInfo,
-      current: 1,
-    });
     initSearch();
   }
 
@@ -173,7 +172,7 @@ const Staff: FC = () => {
               return;
             }
             messageApi.success(message);
-            getList();
+            getList(pageInfo.current, pageInfo.pageSize);
             resolve(true);
           });
         });
@@ -186,8 +185,15 @@ const Staff: FC = () => {
     return false;
   }
 
+  function addStaff() {
+    setAddModalVisible(true);
+  }
+  function handleCancel() {
+    setAddModalVisible(false);
+  }
+
   useEffect(() => {
-    initSearch();
+    getList(1, pageInfo.pageSize);
   }, []);
 
   return (
@@ -196,26 +202,26 @@ const Staff: FC = () => {
       <div className={styles.staffContainer}>
         <Card bordered={false}>
           <h3>员工管理</h3>
-          <Form form={form} {...layout} className={styles.filter}>
-            <Row gutter={layout.gutter}>
-              <Col span={layout.colSpan}>
+          <Form form={form} {...formItemLayout} className={styles.filter}>
+            <Row gutter={grid.gutter}>
+              <Col span={grid.colSpan}>
                 <Form.Item name="phone" label="手机号码">
                   <Input placeholder="请输入" />
                 </Form.Item>
               </Col>
-              <Col span={layout.colSpan}>
+              <Col span={grid.colSpan}>
                 <Form.Item name="nickname" label="用户名">
                   <Input placeholder="请输入" />
                 </Form.Item>
               </Col>
-              <Col span={layout.colSpan}>
+              <Col span={grid.colSpan}>
                 <Form.Item name="name" label="真实姓名">
                   <Input placeholder="请输入" />
                 </Form.Item>
               </Col>
-              <Col span={layout.colSpan}>
+              <Col span={grid.colSpan}>
                 <Button onClick={reset}>重置</Button>
-                <Button type="primary" onClick={onSearch}>
+                <Button type="primary" onClick={() => getList(pageInfo.current, pageInfo.pageSize)}>
                   查询
                 </Button>
               </Col>
@@ -226,7 +232,9 @@ const Staff: FC = () => {
         <Card bordered={false} className={styles.table}>
           <div className={styles.tableTilte}>
             <h3>员工列表</h3>
-            <Button type="primary">添加员工</Button>
+            <Button type="primary" onClick={addStaff}>
+              添加员工
+            </Button>
           </div>
           <Table
             className={styles.tableContainer}
@@ -250,6 +258,11 @@ const Staff: FC = () => {
           />
         </Card>
       </div>
+      <AddModal
+        visible={addModalVisible}
+        reset={() => initSearch()}
+        cancel={() => handleCancel()}
+      />
     </>
   );
 };
