@@ -15,6 +15,7 @@ const Home = lazy(() => import('@/pages/home'));
 const User = lazy(() => import('@/pages/user'));
 const Staff = lazy(() => import('@/pages/staff'));
 const Enterprise = lazy(() => import('@/pages/merchant/enterprise'));
+const Individuality = lazy(() => import('@/pages/merchant/individuality'));
 
 // 上层加载
 const lazyComponent = (element: JSX.Element) => {
@@ -42,6 +43,10 @@ const routes = [
       {
         path: '/enterprise/list',
         element: <RequireAuth>{lazyComponent(<Enterprise />)}</RequireAuth>,
+      },
+      {
+        path: '/individuality/list',
+        element: <RequireAuth>{lazyComponent(<Individuality />)}</RequireAuth>,
       },
       {
         path: '/staff',

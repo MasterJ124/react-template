@@ -4,22 +4,22 @@ export const ACCESS_TOKEN = 'ACCESS_TOKEN';
 export const USER_INFO = 'USER_INFO';
 // 商户类型
 export const MERCHANT_TYPE = [
-  {
-    value: 0,
-    label: '全部',
-  },
+  //{
+  //  value: 0,
+  //  label: '全部',
+  //},
   {
     value: 1,
-    label: 'MCN商户',
+    label: 'MCN',
   },
   {
     value: 2,
     label: '供应商',
   },
-  {
-    value: 3,
-    label: '个体工商户',
-  },
+  //{
+  //  value: 3,
+  //  label: '个体工商户',
+  //},
 ];
 // 审核状态
 export const AUDIT_STATUS = [
