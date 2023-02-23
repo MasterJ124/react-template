@@ -109,7 +109,20 @@ const Login: FC = () => {
                   marginBottom: '24px',
                 }}
               >
-                <Form.Item name="mobile" rules={[{ required: true, message: '请输入手机号码' }]}>
+                <Form.Item
+                  name="mobile"
+                  rules={[
+                    { required: true, message: '请输入手机号码' },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (!value || /^1\d{10}$/.test(value)) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject(new Error('手机号码格式错误'));
+                      },
+                    }),
+                  ]}
+                >
                   <Input size="large" placeholder="请输入您的手机号码" />
                 </Form.Item>
                 <Form.Item>

@@ -96,19 +96,28 @@ const User: FC = () => {
     },
   ];
   const search = (page: number, page_size: number) => {
-    const data = form.getFieldsValue();
-    const params = Object.assign({ page: page || current, page_size: page_size || pageSize }, data);
-    getUserList(params).then((res) => {
-      const { code, data, message } = res;
-      if (code !== 0) {
-        messageApi.open({
-          type: 'error',
-          content: message,
+    form
+      .validateFields()
+      .then((values) => {
+        const params = Object.assign(
+          { page: page || current, page_size: page_size || pageSize },
+          values,
+        );
+        getUserList(params).then((res) => {
+          const { code, data, message } = res;
+          if (code !== 0) {
+            messageApi.open({
+              type: 'error',
+              content: message,
+            });
+          }
+          setList(data?.lists || []);
+          setTotal(data?.paginate?.total || 0);
         });
-      }
-      setList(data?.lists || []);
-      setTotal(data?.paginate?.total || 0);
-    });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   const showTotal: PaginationProps['showTotal'] = (total) => `共 ${total} 项数据`;
   const onShowSizeChange = async (current: number, size: number) => {
@@ -154,7 +163,20 @@ const User: FC = () => {
         <Form form={form} labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
           <Row gutter={12}>
             <Col span={6}>
-              <Form.Item name="phone" label="手机号码">
+              <Form.Item
+                name="phone"
+                label="手机号码"
+                rules={[
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value || /^1\d{10}$/.test(value)) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(new Error('手机号码格式错误'));
+                    },
+                  }),
+                ]}
+              >
                 <Input placeholder="请输入" />
               </Form.Item>
             </Col>

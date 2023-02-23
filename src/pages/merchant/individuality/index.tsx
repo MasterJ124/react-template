@@ -175,22 +175,28 @@ const Individuality: FC = () => {
     },
   ];
   const search = (page: number, page_size: number) => {
-    const data = form.getFieldsValue();
-    const params = Object.assign(
-      { category: 2, page: page || current, page_size: page_size || pageSize },
-      data,
-    );
-    getMerchantList(params).then((res) => {
-      const { code, data, message } = res;
-      if (code !== 0) {
-        messageApi.open({
-          type: 'error',
-          content: message,
+    form
+      .validateFields()
+      .then((values) => {
+        const params = Object.assign(
+          { category: 2, page: page || current, page_size: page_size || pageSize },
+          values,
+        );
+        getMerchantList(params).then((res) => {
+          const { code, data, message } = res;
+          if (code !== 0) {
+            messageApi.open({
+              type: 'error',
+              content: message,
+            });
+          }
+          setList(data?.lists || []);
+          setTotal(data?.paginate?.total || 0);
         });
-      }
-      setList(data?.lists || []);
-      setTotal(data?.paginate?.total || 0);
-    });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   const showTotal: PaginationProps['showTotal'] = (total) => `共 ${total} 项数据`;
   const onShowSizeChange = async (current: number, size: number) => {
@@ -265,12 +271,38 @@ const Individuality: FC = () => {
               </Form.Item>
             </Col>
             <Col span={6}>
-              <Form.Item name="operator_phone" label="申请人手机号">
+              <Form.Item
+                name="operator_phone"
+                label="申请人手机号"
+                rules={[
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value || /^1\d{10}$/.test(value)) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(new Error('手机号码格式错误'));
+                    },
+                  }),
+                ]}
+              >
                 <Input placeholder="请输入" />
               </Form.Item>
             </Col>
             <Col span={6}>
-              <Form.Item name="admin_phone" label="超管手机号">
+              <Form.Item
+                name="admin_phone"
+                label="超管手机号"
+                rules={[
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value || /^1\d{10}$/.test(value)) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(new Error('手机号码格式错误'));
+                    },
+                  }),
+                ]}
+              >
                 <Input placeholder="请输入" />
               </Form.Item>
             </Col>
