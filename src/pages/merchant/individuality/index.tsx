@@ -2,11 +2,10 @@ import type { FC } from 'react';
 import { Form, Input, Button, Row, Col, message, Select, Table, Pagination, Card } from 'antd';
 import { useState, useEffect } from 'react';
 import type { PaginationProps } from 'antd';
-import '@/pages/login/index.less';
 import { getMerchantList } from '@/api/merchant';
 import { AUDIT_STATUS, MERCHANT_STATUS } from '@/utils/config';
 
-const Home: FC = () => {
+const Individuality: FC = () => {
   const [form] = Form.useForm();
   const [list, setList] = useState([]);
   const [messageApi, contextHolder] = message.useMessage();
@@ -280,4 +279,4 @@ const Home: FC = () => {
   );
 };
 
-export default Home;
+export default Individuality;

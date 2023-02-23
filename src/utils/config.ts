@@ -55,3 +55,14 @@ export const MERCHANT_STATUS = [
     label: '禁用',
   },
 ];
+// 用户状态
+export const USER_STATUS = [
+  {
+    value: 0,
+    label: '禁用',
+  },
+  {
+    value: 1,
+    label: '启用',
+  },
+];
