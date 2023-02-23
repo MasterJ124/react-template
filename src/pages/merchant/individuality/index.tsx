@@ -14,8 +14,9 @@ import {
 } from 'antd';
 import { useState, useEffect } from 'react';
 import type { PaginationProps } from 'antd';
-import { getMerchantList } from '@/api/merchant';
+import { getMerchantList, setMerchantStatus } from '@/api/merchant';
 import { AUDIT_STATUS, MERCHANT_STATUS } from '@/utils/config';
+import ExamineModal from '../components/examineModal';
 
 const Individuality: FC = () => {
   const [form] = Form.useForm();
@@ -25,6 +26,7 @@ const Individuality: FC = () => {
   const [current, setCurrent] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [open, setOpen] = useState(false);
+  const [checkModal, setCheckModal] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [id, setId] = useState(0);
   const [status, setStatus] = useState(0);
@@ -161,7 +163,7 @@ const Individuality: FC = () => {
       fixed: 'right',
       render: (text, record: any) => (
         <div>
-          {record.status === 3 && <a>审核</a>}
+          {record.status === 3 && <a onClick={() => checkFn(record.id)}>审核</a>}
           {record.status === 1 && record.company_info.status === 2 && (
             <a onClick={() => showModal(record.company_info.status, record.id)}>启用</a>
           )}
@@ -202,12 +204,19 @@ const Individuality: FC = () => {
     setPageSize(10);
     search(1, 10);
   };
+  const checkFn = (id: number) => {
+    setId(id);
+    setCheckModal(true);
+  };
+  const cancel = () => {
+    setCheckModal(false);
+    search(current, pageSize);
+  };
   const showModal = (status: number, id: number) => {
     setId(id);
     setStatus(status);
     setOpen(true);
   };
-
   const handleOk = () => {
     setConfirmLoading(true);
     setMerchantStatus({
@@ -346,6 +355,7 @@ const Individuality: FC = () => {
           {status === 1 ? '禁用后该商户将不可访问管理中心，确认禁用？' : '确认启用该商户？'}
         </p>
       </Modal>
+      {checkModal && <ExamineModal id={id} cancel={cancel} />}
     </div>
   );
 };
