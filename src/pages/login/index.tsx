@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import { useState } from 'react';
-import { Form, Input, Button, Row, Col, message } from 'antd';
+import { Form, Input, Button, Row, Col, message, Modal } from 'antd';
 import logo from '@/assets/images/logo.png';
 import '@/pages/login/index.less';
 import { login, smsSend, getUserInfo } from '@/api/login';
@@ -76,7 +76,17 @@ const Login: FC = () => {
       .then((res) => {
         const { code, data, message } = res;
         if (code !== 0) {
-          messageApi.error(message);
+          if (code === 30001) {
+            Modal.warning({
+              title: '提示',
+              icon: null,
+              content: message,
+              okText: '确认',
+            });
+          } else {
+            messageApi.error(message);
+          }
+          return;
         }
         ls.set(ACCESS_TOKEN, data.token);
         fetchUserInfo();
