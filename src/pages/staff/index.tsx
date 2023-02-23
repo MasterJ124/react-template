@@ -11,9 +11,13 @@ import {
   Pagination,
   message as $message,
   Switch,
+  Modal,
 } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import styles from './index.module.less';
+
+// api
+import { getMemberList, addMember, memberSwitch } from '@/api/staff';
 
 interface PageInfo {
   current: number;
@@ -22,28 +26,26 @@ interface PageInfo {
 }
 
 const Staff: FC = () => {
-  // ref
-  const refEditRoleModal = useRef<any>(null);
-
   const [messageApi, contextHolder] = $message.useMessage();
-  const [options, setOptions] = useState([]);
-  const [role, setRole] = useState<number | undefined>();
-  const [keywords, setKeywords] = useState<string | undefined>();
+  const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const [addModalVisible, setAddModalVisible] = useState(false);
-  const [assignModalVisible, setAssignModalVisible] = useState(false);
-  const [currentInfo, setCurrentInfo] = useState<{ user_id: number }>();
   const [dataList, setDataList] = useState([]);
   const [pageInfo, setPageInfo] = useState<PageInfo>({
     current: 1,
     pageSize: 10,
     total: 0,
   });
+  const layout = {
+    labelCol: { span: 8 },
+    wrapperCol: { span: 16 },
+    gutter: 12,
+    colSpan: 6,
+  };
 
   const columns: ColumnsType<any> = [
     {
-      title: '用户ID',
-      dataIndex: 'user_id',
+      title: 'ID',
+      dataIndex: 'id',
       width: 80,
     },
     {
@@ -63,10 +65,9 @@ const Staff: FC = () => {
       width: 120,
     },
     {
-      title: '邮箱',
-      dataIndex: 'email',
-      width: 140,
-      render: (_: any, record: any) => <>{record.email || '--'}</>,
+      title: '用户ID',
+      dataIndex: 'user_id',
+      width: 120,
     },
     {
       title: '角色',
@@ -82,7 +83,7 @@ const Staff: FC = () => {
         <Switch
           checked={!!text}
           disabled={isSuperAdmin(record)}
-          // onClick={(checked, event) => authChange(checked, event, record)}
+          onClick={(checked, event) => authChange(checked, event, record)}
         />
       ),
     },
@@ -92,31 +93,53 @@ const Staff: FC = () => {
       width: 140,
       render: (_: any, record: any) => <>{record.updated_at || '--'}</>,
     },
-    {
-      title: '操作',
-      dataIndex: 'opreate',
-      width: 200,
-      align: 'center',
-      render: (text: any, record: any) => (
-        <>
-          <Button
-            type="link"
-            disabled={isSuperAdmin(record)}
-            // onClick={() => assignRole(record)}
-          >
-            分配角色
-          </Button>
-          <Button
-            type="link"
-            disabled={isSuperAdmin(record)}
-            // onClick={() => editRole(record)}
-          >
-            编辑角色
-          </Button>
-        </>
-      ),
-    },
   ];
+
+  function onSearch() {
+    const { current, pageSize } = pageInfo;
+    getList(current, pageSize);
+  }
+
+  function initSearch() {
+    getList(1, pageInfo.pageSize);
+  }
+
+  function reset() {
+    form.resetFields();
+    setPageInfo({
+      ...pageInfo,
+      current: 1,
+    });
+    initSearch();
+  }
+
+  function getList(current: number, pageSize: number) {
+    const { phone, nickname, name } = form.getFieldsValue();
+    setLoading(true);
+    getMemberList({
+      phone,
+      nickname,
+      name,
+      page: current,
+      page_size: pageSize,
+    })
+      .then((res) => {
+        const { code, data, message } = res;
+        if (code !== 0) {
+          messageApi.error(message);
+          return;
+        }
+        setDataList(data.lists);
+        setPageInfo({
+          current,
+          pageSize,
+          total: data.paginate.total,
+        });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
 
   function onPageChange(page: number, pageSize: number) {
     setPageInfo({
@@ -124,7 +147,38 @@ const Staff: FC = () => {
       current: page,
       pageSize,
     });
-    // getList(page, pageSize, keywords, role);
+    getList(page, pageSize);
+  }
+
+  function authChange(value: boolean, e: any, record: any) {
+    e.preventDefault();
+    Modal.confirm({
+      title: value ? '授权用户' : '取消授权',
+      icon: null,
+      content: value
+        ? '授权该用户账号，用户可访问平台，确认授权？'
+        : '取消该用户账号授权后，用户不能访问平台，确认取消授权？',
+      okText: value ? '确认授权' : '确认取消',
+      cancelText: '关闭',
+      onOk() {
+        return new Promise((resolve, reject) => {
+          memberSwitch({
+            user_id: record.user_id,
+            switch: value ? 'enable' : 'disable',
+          }).then((res) => {
+            const { code, message } = res;
+            if (code !== 0) {
+              messageApi.error(message);
+              reject();
+              return;
+            }
+            messageApi.success(message);
+            getList();
+            resolve(true);
+          });
+        });
+      },
+    });
   }
 
   function isSuperAdmin(record: any) {
@@ -133,8 +187,7 @@ const Staff: FC = () => {
   }
 
   useEffect(() => {
-    // initSearch();
-    // getRole();
+    initSearch();
   }, []);
 
   return (
@@ -143,37 +196,28 @@ const Staff: FC = () => {
       <div className={styles.staffContainer}>
         <Card bordered={false}>
           <h3>员工管理</h3>
-          <Form labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
-            <Row gutter={12}>
-              <Col span={6}>
-                <Form.Item name="mobile" label="手机号码">
+          <Form form={form} {...layout} className={styles.filter}>
+            <Row gutter={layout.gutter}>
+              <Col span={layout.colSpan}>
+                <Form.Item name="phone" label="手机号码">
                   <Input placeholder="请输入" />
                 </Form.Item>
               </Col>
-              <Col span={6}>
-                <Form.Item name="user" label="用户名">
+              <Col span={layout.colSpan}>
+                <Form.Item name="nickname" label="用户名">
                   <Input placeholder="请输入" />
                 </Form.Item>
               </Col>
-              <Col span={6}>
+              <Col span={layout.colSpan}>
                 <Form.Item name="name" label="真实姓名">
                   <Input placeholder="请输入" />
                 </Form.Item>
               </Col>
-              <Col
-                span={6}
-                style={{
-                  textAlign: 'right',
-                }}
-              >
-                <Button
-                  style={{
-                    marginRight: '16px',
-                  }}
-                >
-                  重置
+              <Col span={layout.colSpan}>
+                <Button onClick={reset}>重置</Button>
+                <Button type="primary" onClick={onSearch}>
+                  查询
                 </Button>
-                <Button type="primary">查询</Button>
               </Col>
             </Row>
           </Form>

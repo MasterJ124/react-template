@@ -1,6 +1,6 @@
 import axios, { AxiosRequestHeaders, AxiosResponse, AxiosError } from 'axios';
 import { notification } from 'antd';
-import { ACCESS_TOKEN } from './config';
+import { ACCESS_TOKEN, COMPANY_ID } from './config';
 import ls from './Storage';
 import { clearUserInfo } from './util';
 
@@ -12,7 +12,6 @@ const service = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
   timeout: 1000 * 60 * 3, // 请求超时时间
   responseType: 'json',
-  headers: {},
 });
 
 // 异常拦截处理器
@@ -45,7 +44,9 @@ service.interceptors.request.use((config) => {
     });
   }
   const token = ls.get(ACCESS_TOKEN);
+  const cid = ls.get(COMPANY_ID);
   if (token) (config.headers as AxiosRequestHeaders)['X-Token'] = token;
+  if (cid) (config.headers as AxiosRequestHeaders)['X-Cid'] = cid;
   return config;
 }, errorHandler);
 

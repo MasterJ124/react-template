@@ -3,8 +3,8 @@ import { useState } from 'react';
 import { Form, Input, Button, Row, Col, message } from 'antd';
 import logo from '@/assets/images/logo.png';
 import '@/pages/login/index.less';
-import { login, smsSend } from '@/api/login';
-import { ACCESS_TOKEN } from '@/utils/config';
+import { login, smsSend, getUserInfo } from '@/api/login';
+import { ACCESS_TOKEN, COMPANY_ID } from '@/utils/config';
 import { useNavigate } from 'react-router-dom';
 import ls from '@/utils/Storage';
 import { useAppDispatch } from '@/app/hooks';
@@ -79,14 +79,31 @@ const Login: FC = () => {
           messageApi.error(message);
         }
         ls.set(ACCESS_TOKEN, data.token);
-        dispatch(setUserToken(data.token));
-        dispatch(setUserInfo(data));
+        fetchUserInfo();
         history('/user');
       })
       .finally(() => {
         setLoading(false);
       });
   };
+  // 获取用户信息
+  const fetchUserInfo = () => {
+    getUserInfo()
+      .then((res) => {
+        const { data, code, message } = res;
+        if (code !== 0) {
+          messageApi.error(message);
+          return;
+        }
+        if (data?.company?.company_id) ls.set(COMPANY_ID, data.company.company_id);
+        dispatch(setUserToken(data.token));
+        dispatch(setUserInfo(data));
+      })
+      .catch((err) => {
+        messageApi.error(err.message);
+      });
+  };
+
   return (
     <div className="login-container">
       <div className="head">

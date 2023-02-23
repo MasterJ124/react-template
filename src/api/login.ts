@@ -5,6 +5,13 @@ export async function login(parameter: any): Promise<any> {
   return $post('/user/login', parameter);
 }
 
+/**
+ * 获取用户信息
+ */
+export async function getUserInfo(): Promise<any> {
+  return $get('/user/info');
+}
+
 // 发送短信
 export async function smsSend(parameter: any): Promise<any> {
   return $post('/sms/send', parameter);
