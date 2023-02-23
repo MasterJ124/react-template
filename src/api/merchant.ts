@@ -7,10 +7,10 @@ export async function getMerchantList(parameter: any): Promise<any> {
 
 // 启用禁用
 export async function setMerchantStatus(parameter: any): Promise<any> {
-  return $post('/merchant/status', parameter);
+  return $post('/admin/merchant/status', parameter);
 }
 
 // 审核
-export async function logout(parameter: any): Promise<any> {
+export async function merchantCheck(parameter: any): Promise<any> {
   return $post('/admin/merchant/check', parameter);
 }

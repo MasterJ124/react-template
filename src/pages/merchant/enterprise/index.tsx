@@ -1,8 +1,20 @@
 import type { FC } from 'react';
-import { Form, Input, Button, Row, Col, message, Select, Table, Pagination, Card } from 'antd';
+import {
+  Form,
+  Input,
+  Button,
+  Row,
+  Col,
+  message,
+  Select,
+  Table,
+  Pagination,
+  Card,
+  Modal,
+} from 'antd';
 import { useState, useEffect } from 'react';
 import type { PaginationProps } from 'antd';
-import { getMerchantList } from '@/api/merchant';
+import { getMerchantList, setMerchantStatus } from '@/api/merchant';
 import { MERCHANT_TYPE, AUDIT_STATUS, MERCHANT_STATUS } from '@/utils/config';
 
 const Enterprise: FC = () => {
@@ -12,6 +24,10 @@ const Enterprise: FC = () => {
   const [total, setTotal] = useState(0);
   const [current, setCurrent] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [open, setOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [id, setId] = useState(0);
+  const [status, setStatus] = useState(0);
   const columns = [
     {
       title: 'ID',
@@ -151,8 +167,12 @@ const Enterprise: FC = () => {
       render: (text, record: any) => (
         <div>
           {record.status === 3 && <a>审核</a>}
-          {record.status === 1 && record.company_info.status === 2 && <a>启用</a>}
-          {record.status === 1 && record.company_info.status === 1 && <a>禁用</a>}
+          {record.status === 1 && record.company_info.status === 2 && (
+            <a onClick={() => showModal(record.company_info.status, record.id)}>启用</a>
+          )}
+          {record.status === 1 && record.company_info.status === 1 && (
+            <a onClick={() => showModal(record.company_info.status, record.id)}>禁用</a>
+          )}
         </div>
       ),
     },
@@ -186,6 +206,40 @@ const Enterprise: FC = () => {
     setCurrent(1);
     setPageSize(10);
     search(1, 10);
+  };
+  const showModal = (status: number, id: number) => {
+    setId(id);
+    setStatus(status);
+    setOpen(true);
+  };
+
+  const handleOk = () => {
+    setConfirmLoading(true);
+    setMerchantStatus({
+      id,
+      status: status === 1 ? 2 : 1,
+    })
+      .then((res) => {
+        if (res.code !== 0) {
+          messageApi.open({
+            type: 'error',
+            content: res.message,
+          });
+          return;
+        }
+        messageApi.open({
+          type: 'success',
+          content: '操作成功',
+        });
+        setOpen(false);
+        search(current, pageSize);
+      })
+      .finally(() => {
+        setConfirmLoading(false);
+      });
+  };
+  const handleCancel = () => {
+    setOpen(false);
   };
   useEffect(() => {
     search(current, pageSize);
@@ -280,6 +334,23 @@ const Enterprise: FC = () => {
         </div>
         {contextHolder}
       </Card>
+      <Modal
+        title={status === 1 ? `禁用商户` : '启用商户'}
+        open={open}
+        onOk={handleOk}
+        confirmLoading={confirmLoading}
+        onCancel={handleCancel}
+        okText={status === 1 ? `确认禁用` : '确认启用'}
+      >
+        <p
+          style={{
+            textAlign: 'center',
+            margin: '30px 0',
+          }}
+        >
+          {status === 1 ? '禁用后该商户将不可访问管理中心，确认禁用？' : '确认启用该商户？'}
+        </p>
+      </Modal>
     </div>
   );
 };

@@ -1,5 +1,17 @@
 import type { FC } from 'react';
-import { Form, Input, Button, Row, Col, message, Select, Table, Pagination, Card } from 'antd';
+import {
+  Form,
+  Input,
+  Button,
+  Row,
+  Col,
+  message,
+  Select,
+  Table,
+  Pagination,
+  Card,
+  Modal,
+} from 'antd';
 import { useState, useEffect } from 'react';
 import type { PaginationProps } from 'antd';
 import { getUserList } from '@/api/user';
@@ -12,6 +24,10 @@ const User: FC = () => {
   const [total, setTotal] = useState(0);
   const [current, setCurrent] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [open, setOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [id, setId] = useState(0);
+  const [status, setStatus] = useState(0);
   const columns = [
     {
       title: 'ID',
@@ -73,8 +89,8 @@ const User: FC = () => {
       fixed: 'right',
       render: (text, record: any) => (
         <div>
-          {record.status === 0 && <a>启用</a>}
-          {record.status === 1 && <a>禁用</a>}
+          {record.status === 0 && <a onClick={() => showModal(record.status, record.id)}>启用</a>}
+          {record.status === 1 && <a onClick={() => showModal(record.status, record.id)}>禁用</a>}
         </div>
       ),
     },
@@ -105,6 +121,28 @@ const User: FC = () => {
     setCurrent(1);
     setPageSize(10);
     search(1, 10);
+  };
+  const showModal = (status: number, id: number) => {
+    setId(id);
+    setStatus(status);
+    setOpen(true);
+  };
+
+  const handleOk = () => {
+    setConfirmLoading(true);
+    setTimeout(() => {
+      setOpen(false);
+      messageApi.open({
+        type: 'success',
+        content: '接口开发中',
+      });
+      search(current, pageSize);
+      setConfirmLoading(false);
+    }, 2000);
+  };
+
+  const handleCancel = () => {
+    setOpen(false);
   };
   useEffect(() => {
     search(current, pageSize);
@@ -195,6 +233,23 @@ const User: FC = () => {
         </div>
         {contextHolder}
       </Card>
+      <Modal
+        title={status === 1 ? `禁用用户` : '启用用户'}
+        open={open}
+        onOk={handleOk}
+        confirmLoading={confirmLoading}
+        onCancel={handleCancel}
+        okText={status === 1 ? `确认禁用` : '确认启用'}
+      >
+        <p
+          style={{
+            textAlign: 'center',
+            margin: '30px 0',
+          }}
+        >
+          {status === 1 ? '禁用后该用户将不可登录SCM系统，确认禁用？' : '确认启用该用户'}
+        </p>
+      </Modal>
     </div>
   );
 };
