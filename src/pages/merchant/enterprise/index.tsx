@@ -273,7 +273,7 @@ const Enterprise: FC = () => {
             current={current}
             total={total}
             showTotal={showTotal}
-            onShowSizeChange={onShowSizeChange}
+            onChange={onShowSizeChange}
             showSizeChanger
             showQuickJumper
           />
