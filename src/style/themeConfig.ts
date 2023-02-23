@@ -9,5 +9,9 @@ export const themeConfig = {
       borderRadius: 2,
       borderRadiusLG: 4,
     },
+    Input: {
+      borderRadius: 2,
+      borderRadiusLG: 4,
+    },
   },
 };
