@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { Form, Input, Button, Row, Col, message, Select, Table, Pagination } from 'antd';
+import { Form, Input, Button, Row, Col, message, Select, Table, Pagination, Card } from 'antd';
 import { useState, useEffect } from 'react';
 import type { PaginationProps } from 'antd';
 import '@/pages/login/index.less';
@@ -17,38 +17,140 @@ const Home: FC = () => {
     {
       title: 'ID',
       dataIndex: 'id',
+      width: 60,
       key: 'id',
-      render: (text, record: any) => <p>{record.company_info.id}</p>,
     },
     {
       title: '字号名称',
       key: 'title',
+      width: 140,
       render: (text, record: any) => <p>{record.company_info.title}</p>,
     },
     {
       title: '注册号',
-      key: 'title',
+      key: 'cert_code',
+      width: 160,
       render: (text, record: any) => <p>{record.company_info.cert_code}</p>,
     },
     {
       title: '审核状态',
       key: 'status',
-      render: (text, record: any) => <p>{record.status}</p>,
+      width: 100,
+      render: (text, record: any) => (
+        <div>
+          {record.status === 1 && <p>审核通过</p>}
+          {record.status === 2 && <p>审核拒绝</p>}
+          {record.status === 3 && <p>待审核</p>}
+        </div>
+      ),
     },
     {
       title: '商户状态',
       key: 'company_status',
-      render: (text, record: any) => <p>{record.company_info.status}</p>,
+      width: 100,
+      render: (text, record: any) => (
+        <div>
+          {record.company_info.status === 1 && <p>启用</p>}
+          {record.company_info.status === 2 && <p>禁用</p>}
+        </div>
+      ),
+    },
+    {
+      title: '申请人用户名',
+      key: 'nickname',
+      width: 120,
+      render: (text, record: any) => <p>{record.operator_info.nickname}</p>,
     },
     {
       title: '经营地址',
       key: 'address',
+      width: 120,
       render: (text, record: any) => <p>{record.company_info.address}</p>,
+    },
+    {
+      title: '经营者姓名',
+      key: 'corporate_name',
+      width: 120,
+      render: (text, record: any) => <p>{record.company_info.corporate_name}</p>,
+    },
+    {
+      title: '营业执照',
+      key: 'license',
+      width: 120,
+      render: (text, record: any) => <p>{record.company_info.license}</p>,
+    },
+    {
+      title: '经营范围',
+      key: 'business_range',
+      width: 120,
+      render: (text, record: any) => <p>{record.company_info.business_range}</p>,
+    },
+    {
+      title: '申请人用户名',
+      key: 'nickname',
+      width: 120,
+      render: (text, record: any) => <p>{record.operator_info.nickname}</p>,
+    },
+    {
+      title: '营业期限',
+      key: 'title',
+      width: 200,
+      render: (text, record: any) => (
+        <p>
+          {record.company_info.company_end_at
+            ? record.company_info.company_start_at + '-' + record.company_info.company_end_at
+            : '长期'}
+        </p>
+      ),
+    },
+    {
+      title: '商户类型',
+      key: 'corporate_name',
+      width: 140,
+      render: (text, record: any) => <p>个体工商户</p>,
+    },
+    {
+      title: '超管手机号',
+      key: 'admin_info',
+      width: 130,
+      render: (text, record: any) => <p>{record.admin_info.phone}</p>,
+    },
+    {
+      title: '申请时间',
+      key: 'created_at',
+      width: 160,
+      render: (text, record: any) => <p>{record.company_info.created_at}</p>,
+    },
+    {
+      title: '审核时间',
+      key: 'audited_at',
+      width: 160,
+      render: (text, record: any) => <p>{record.audited_at || '-'}</p>,
+    },
+    {
+      title: '失败原因',
+      key: 'reason',
+      width: 120,
+      render: (text, record: any) => <p>{record.reason || '-'}</p>,
+    },
+    {
+      title: '备注',
+      key: 'remark',
+      width: 120,
+      render: (text, record: any) => <p>{record.remark || '-'}</p>,
     },
     {
       title: '操作',
       key: 'opea',
-      render: (text, record: any) => <p>{record.status}</p>,
+      width: 80,
+      fixed: 'right',
+      render: (text, record: any) => (
+        <div>
+          {record.status === 3 && <a>审核</a>}
+          {record.status === 1 && record.company_info.status === 2 && <a>启用</a>}
+          {record.status === 1 && record.company_info.status === 1 && <a>禁用</a>}
+        </div>
+      ),
     },
   ];
   const search = (page: number, page_size: number) => {
@@ -86,7 +188,7 @@ const Home: FC = () => {
   }, []);
   return (
     <div className="user-container">
-      <div className="containerCard">
+      <Card>
         <h4>个体工商户管理</h4>
         <Form form={form} labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
           <Row gutter={12}>
@@ -145,13 +247,14 @@ const Home: FC = () => {
             </Col>
           </Row>
         </Form>
-      </div>
-      <div className="containerCard">
+      </Card>
+      <Card>
         <h4>个体工商户管理列表</h4>
         <Table
           dataSource={list}
           rowKey={(record) => record.id}
           columns={columns}
+          scroll={{ x: 1500 }}
           pagination={false}
         />
         <div
@@ -172,7 +275,7 @@ const Home: FC = () => {
           />
         </div>
         {contextHolder}
-      </div>
+      </Card>
     </div>
   );
 };

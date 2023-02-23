@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { Form, Input, Button, Row, Col, message, Select, Table, Pagination } from 'antd';
+import { Form, Input, Button, Row, Col, message, Select, Table, Pagination, Card } from 'antd';
 import { useState, useEffect } from 'react';
 import type { PaginationProps } from 'antd';
 import '@/pages/login/index.less';
@@ -193,7 +193,7 @@ const Home: FC = () => {
   }, []);
   return (
     <div className="user-container">
-      <div className="containerCard">
+      <Card>
         <h4>企业商户管理</h4>
         <Form form={form} labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
           <Row gutter={12}>
@@ -252,8 +252,8 @@ const Home: FC = () => {
             </Col>
           </Row>
         </Form>
-      </div>
-      <div className="containerCard">
+      </Card>
+      <Card>
         <h4>企业商户管理列表</h4>
         <Table
           dataSource={list}
@@ -280,7 +280,7 @@ const Home: FC = () => {
           />
         </div>
         {contextHolder}
-      </div>
+      </Card>
     </div>
   );
 };
