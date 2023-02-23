@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
+import { fetchUserInfo } from '@/utils/util';
 import Router from './router';
 import dayjs from 'dayjs';
 import { themeConfig } from '@/style/themeConfig';
@@ -11,6 +13,11 @@ import '@/style/common.less';
 dayjs.locale('zh-cn');
 
 function App() {
+  useEffect(() => {
+    // 获取用户信息
+    fetchUserInfo();
+  }, []);
+
   return (
     <ConfigProvider locale={zhCN} theme={themeConfig}>
       <BrowserRouter>
