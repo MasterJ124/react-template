@@ -3,12 +3,11 @@ import { useState } from 'react';
 import { Form, Input, Button, Row, Col, message, Modal } from 'antd';
 import logo from '@/assets/images/logo.png';
 import '@/pages/login/index.less';
-import { login, smsSend, getUserInfo } from '@/api/login';
-import { ACCESS_TOKEN, COMPANY_ID } from '@/utils/config';
+import { login, smsSend } from '@/api/login';
+import { ACCESS_TOKEN } from '@/utils/config';
+import { fetchUserInfo } from '@/utils/util';
 import { useNavigate } from 'react-router-dom';
 import ls from '@/utils/Storage';
-import { useAppDispatch } from '@/app/hooks';
-import { setUserToken, setUserInfo } from '@/features/userInfoSlice';
 
 const Login: FC = () => {
   const [current, setCurrent] = useState(0);
@@ -18,7 +17,6 @@ const Login: FC = () => {
   const [form] = Form.useForm();
   const history = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
-  const dispatch = useAppDispatch();
 
   const getCode = async () => {
     try {
@@ -89,28 +87,12 @@ const Login: FC = () => {
           return;
         }
         ls.set(ACCESS_TOKEN, data.token);
+        // 获取用户信息
         fetchUserInfo();
         history('/user');
       })
       .finally(() => {
         setLoading(false);
-      });
-  };
-  // 获取用户信息
-  const fetchUserInfo = () => {
-    getUserInfo()
-      .then((res) => {
-        const { data, code, message } = res;
-        if (code !== 0) {
-          messageApi.error(message);
-          return;
-        }
-        if (data?.company?.company_id) ls.set(COMPANY_ID, data.company.company_id);
-        dispatch(setUserToken(data.token));
-        dispatch(setUserInfo(data));
-      })
-      .catch((err) => {
-        messageApi.error(err.message);
       });
   };
 
