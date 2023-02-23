@@ -7,6 +7,5 @@ export const themeConfig = {
     borderRadiusLG: 4,
   },
   // components: {
-
   // },
 };
