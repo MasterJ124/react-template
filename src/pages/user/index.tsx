@@ -14,12 +14,13 @@ import {
 } from 'antd';
 import { useState, useEffect } from 'react';
 import type { PaginationProps } from 'antd';
-import { getUserList } from '@/api/user';
+import { getUserList, getUserCompanyList } from '@/api/user';
 import { USER_STATUS } from '@/utils/config';
 
 const User: FC = () => {
   const [form] = Form.useForm();
   const [list, setList] = useState([]);
+  const [companyList, setCompanyList] = useState([]);
   const [messageApi, contextHolder] = message.useMessage();
   const [total, setTotal] = useState(0);
   const [current, setCurrent] = useState(1);
@@ -95,6 +96,21 @@ const User: FC = () => {
       ),
     },
   ];
+  const getUserCompanyListData = () => {
+    getUserCompanyList({
+      page: 1,
+      page_size: 50,
+    }).then((res) => {
+      if (res.code !== 0) {
+        messageApi.open({
+          type: 'error',
+          content: res.message,
+        });
+        return;
+      }
+      setCompanyList(res?.data?.lists || []);
+    });
+  };
   const search = (page: number, page_size: number) => {
     form
       .validateFields()
@@ -155,6 +171,7 @@ const User: FC = () => {
   };
   useEffect(() => {
     search(current, pageSize);
+    getUserCompanyListData();
   }, []);
   return (
     <div className="user-container">
@@ -197,7 +214,17 @@ const User: FC = () => {
             </Col>
             <Col span={6}>
               <Form.Item name="company_name" label="所属商户">
-                <Select placeholder="请选择" />
+                <Select
+                  placeholder="请选择"
+                  showSearch
+                  options={companyList.map((city) => ({
+                    label: city.company.title,
+                    value: city.company.title,
+                  }))}
+                  filterOption={(input, option) =>
+                    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                  }
+                />
               </Form.Item>
             </Col>
             <Col span={6}>

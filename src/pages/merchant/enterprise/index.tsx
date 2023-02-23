@@ -13,6 +13,7 @@ import {
   Modal,
 } from 'antd';
 import { useState, useEffect } from 'react';
+import '../index.less';
 import type { PaginationProps } from 'antd';
 import { getMerchantList, setMerchantStatus } from '@/api/merchant';
 import { MERCHANT_TYPE, AUDIT_STATUS, MERCHANT_STATUS } from '@/utils/config';
@@ -55,9 +56,9 @@ const Enterprise: FC = () => {
       width: 100,
       render: (text, record: any) => (
         <div>
-          {record.status === 1 && <p>审核通过</p>}
-          {record.status === 2 && <p>审核拒绝</p>}
-          {record.status === 3 && <p>待审核</p>}
+          {record.status === 1 && <p className="pass">审核通过</p>}
+          {record.status === 2 && <p className="reject">审核拒绝</p>}
+          {record.status === 3 && <p className="default">待审核</p>}
         </div>
       ),
     },
@@ -67,8 +68,9 @@ const Enterprise: FC = () => {
       width: 100,
       render: (text, record: any) => (
         <div>
-          {record.company_info.status === 1 && <p>启用</p>}
-          {record.company_info.status === 2 && <p>禁用</p>}
+          {record.company_info.status === 1 && <p className="pass">启用</p>}
+          {record.company_info.status === 2 && <p className="reject">禁用</p>}
+          {![1, 2].includes(record.company_info.status) && <p>— —</p>}
         </div>
       ),
     },
@@ -147,19 +149,19 @@ const Enterprise: FC = () => {
       title: '审核时间',
       key: 'audited_at',
       width: 160,
-      render: (text, record: any) => <p>{record.audited_at || '-'}</p>,
+      render: (text, record: any) => <p>{record.audited_at || '— —'}</p>,
     },
     {
       title: '失败原因',
       key: 'reason',
       width: 120,
-      render: (text, record: any) => <p>{record.reason || '-'}</p>,
+      render: (text, record: any) => <p>{record.reason || '— —'}</p>,
     },
     {
       title: '备注',
       key: 'remark',
       width: 120,
-      render: (text, record: any) => <p>{record.remark || '-'}</p>,
+      render: (text, record: any) => <p>{record.remark || '— —'}</p>,
     },
     {
       title: '操作',
