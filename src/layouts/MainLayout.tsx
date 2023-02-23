@@ -1,14 +1,19 @@
 import type { FC } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
+import HeadTop from '@/components/header';
 
 const { Header, Content, Sider } = Layout;
 
 const MainLayout: FC = () => {
   return (
     <Layout style={{ height: '100%' }}>
-      <Header className="header">
-        <div style={{ color: '#FFF' }}>运营管理</div>
+      <Header
+        style={{
+          background: '#fff',
+        }}
+      >
+        <HeadTop />
       </Header>
       <Layout>
         <Sider width={200} style={{ background: '#FFF' }}>

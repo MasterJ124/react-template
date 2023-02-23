@@ -264,7 +264,14 @@ const Enterprise: FC = () => {
   return (
     <div className="user-container">
       <Card>
-        <h4>企业商户管理</h4>
+        <h4
+          style={{
+            fontSize: '18px',
+            marginBottom: '24px',
+          }}
+        >
+          企业商户管理
+        </h4>
         <Form form={form} labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
           <Row gutter={12}>
             <Col span={6}>
@@ -350,7 +357,14 @@ const Enterprise: FC = () => {
         </Form>
       </Card>
       <Card>
-        <h4>企业商户管理列表</h4>
+        <h4
+          style={{
+            fontSize: '18px',
+            marginBottom: '24px',
+          }}
+        >
+          企业商户管理列表
+        </h4>
         <Table
           dataSource={list}
           rowKey={(record) => record.id}
