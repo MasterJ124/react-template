@@ -1,11 +1,14 @@
 import type { FC } from 'react';
 import { Outlet } from 'react-router-dom';
-import { Layout, Menu } from 'antd';
+import { Layout } from 'antd';
 // import HeadTop from '@/components/header';
+import SideMenu from '@/components/Menu';
 
 const { Header, Content, Sider } = Layout;
 
 const MainLayout: FC = () => {
+
+
   return (
     <Layout style={{ height: '100%' }}>
       <Header
@@ -17,7 +20,8 @@ const MainLayout: FC = () => {
       </Header>
       <Layout>
         <Sider width={200} style={{ background: '#FFF' }}>
-          <Menu mode="inline" style={{ height: '100%', borderRight: 0 }} />
+          {/*<Menu mode="inline" style={{ height: '100%', borderRight: 0 }} />*/}
+          <SideMenu />
         </Sider>
         <Layout style={{ padding: '16px 24px' }}>
           <Content
