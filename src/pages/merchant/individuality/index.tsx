@@ -99,7 +99,14 @@ const Individuality: FC = () => {
       title: '营业执照',
       key: 'license',
       width: 120,
-      render: (_: any, record: any) => <p>{record.company_info.license}</p>,
+      render: (_: any, record: any) => (
+        <div>
+          {record.company_info.license.includes('http') && (
+            <img src={record.company_info.license} alt="" width={80} />
+          )}
+          {!record.company_info.license.includes('http') && <p>{record.company_info.license}</p>}
+        </div>
+      ),
     },
     {
       title: '经营范围',

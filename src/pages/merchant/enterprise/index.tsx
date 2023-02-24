@@ -111,13 +111,29 @@ const Enterprise: FC = () => {
       title: '营业执照',
       key: 'license',
       width: 120,
-      render: (_: any, record: any) => <p>{record.company_info.license}</p>,
+      render: (_: any, record: any) => (
+        <div>
+          {record.company_info.license.includes('http') && (
+            <img src={record.company_info.license} alt="" width={80} />
+          )}
+          {!record.company_info.license.includes('http') && <p>{record.company_info.license}</p>}
+        </div>
+      ),
     },
     {
       title: '法人证件照',
       key: 'corporate_identity_front',
       width: 120,
-      render: (_: any, record: any) => <p>{record.company_info.corporate_identity_front}</p>,
+      render: (_: any, record: any) => (
+        <div>
+          {record.company_info.corporate_identity_front.includes('http') && (
+            <img src={record.company_info.license} alt="" width={80} />
+          )}
+          {!record.company_info.corporate_identity_front.includes('http') && (
+            <p>{record.company_info.corporate_identity_front}</p>
+          )}
+        </div>
+      ),
     },
     {
       title: '申请人手机号',
