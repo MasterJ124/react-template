@@ -18,7 +18,7 @@ import { getUserList, getUserCompanyList, setMemberSwitch } from '@/api/user';
 import { USER_STATUS } from '@/utils/config';
 import type { ColumnsType } from 'antd/es/table';
 interface DataType {
-  id: number;
+  user_id: number;
 }
 const User: FC = () => {
   const [form] = Form.useForm();
@@ -292,7 +292,7 @@ const User: FC = () => {
         </h4>
         <Table
           dataSource={list}
-          rowKey={(record) => record.id}
+          rowKey={(record) => record.user_id}
           columns={columns}
           scroll={{ x: 1500 }}
           pagination={false}
