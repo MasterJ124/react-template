@@ -2,6 +2,17 @@ const path = require('path');
 const Dotenv = require('dotenv-webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+// 配置css modules生成的本地标识符
+const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
+
+// 匹配css
+const cssRegex = /\.css$/;
+const cssModuleRegex = /\.module\.css$/;
+// 匹配less
+const lessRegex = /\.(less)$/;
+const lessModuleRegex = /\.module\.(less)$/;
+
+const isProduction = !!(process.env.NODE_ENV === 'production');
 
 module.exports = {
   entry: path.join(__dirname, '../src/index.tsx'),
@@ -26,9 +37,88 @@ module.exports = {
         test: /.(ts|tsx)$/, // 匹配.ts, tsx文件
         use: 'babel-loader',
       },
+      // {
+      //   test: /.(css|less)$/, //匹配 css和less 文件
+      //   use: ['style-loader', 'css-loader', 'less-loader'],
+      // },
       {
-        test: /.(css|less)$/, //匹配 css和less 文件
-        use: ['style-loader', 'css-loader', 'less-loader'],
+        test: cssRegex, //匹配 css文件
+        exclude: cssModuleRegex,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 0,
+              sourceMap: !isProduction,
+              modules: {
+                mode: 'icss',
+              },
+            },
+          },
+        ],
+      },
+      {
+        test: cssModuleRegex, //匹配 *.module.css文件
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 0,
+              sourceMap: !isProduction,
+              modules: {
+                mode: 'local',
+                getLocalIdent: getCSSModuleLocalIdent,
+              },
+            },
+          },
+        ],
+      },
+      {
+        test: lessRegex, //匹配 .less文件
+        exclude: lessModuleRegex,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 2,
+              sourceMap: !isProduction,
+              modules: {
+                mode: 'local',
+                getLocalIdent: getCSSModuleLocalIdent,
+              },
+            },
+          },
+          // css兼容性处理 添加浏览器的前缀
+          'postcss-loader',
+          'less-loader',
+        ],
+        // Don't consider CSS imports dead code even if the
+        // containing package claims to have no side effects.
+        // Remove this when webpack adds a warning or an error for this.
+        // See https://github.com/webpack/webpack/issues/6571
+        sideEffects: true,
+      },
+      {
+        test: lessModuleRegex, //匹配 *.module.less文件
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 2,
+              sourceMap: !isProduction,
+              modules: {
+                mode: 'local',
+                getLocalIdent: getCSSModuleLocalIdent,
+              },
+            },
+          },
+          'postcss-loader',
+          'less-loader',
+        ],
       },
       {
         test: /.(png|jpg|jpeg|gif|svg)$/, // 匹配图片文件
