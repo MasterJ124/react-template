@@ -30,7 +30,7 @@ const routes = [
   // },
   {
     path: '/login',
-    element: lazyComponent(<Login />),
+    element: <RequireAuth>{lazyComponent(<Login />)}</RequireAuth>,
   },
   {
     path: '/',
