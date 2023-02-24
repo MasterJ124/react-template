@@ -8,7 +8,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 // spin
-import Spinner from '@/components/spinner';
+import Spinner from '@/components/Spinner';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(

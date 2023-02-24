@@ -6,7 +6,7 @@ import RequireAuth from './auth';
 // layout
 import MainLayout from '@/layouts/MainLayout';
 // spin
-import Spinner from '@/components/spinner';
+import Spinner from '@/components/Spinner';
 import NoFoundPage from '@/pages/404';
 import Login from '@/pages/login';
 
@@ -22,7 +22,7 @@ const lazyComponent = (element: JSX.Element) => {
   return <React.Suspense fallback={<Spinner />}>{element}</React.Suspense>;
 };
 
-const routes = [
+export const routes = [
   { path: '/', element: <Navigate to="/user" /> },
   // {
   //   path: '/home',
@@ -37,16 +37,24 @@ const routes = [
     element: <MainLayout />,
     children: [
       {
+        icon: '',
+        name: '用户管理',
         path: '/user',
         element: <RequireAuth>{lazyComponent(<User />)}</RequireAuth>,
       },
       {
-        path: '/enterprise/list',
-        element: <RequireAuth>{lazyComponent(<Enterprise />)}</RequireAuth>,
-      },
-      {
-        path: '/individuality/list',
-        element: <RequireAuth>{lazyComponent(<Individuality />)}</RequireAuth>,
+        path: '/manage',
+        children: [
+          {
+            index: true,
+            path: '/manage/enterprise',
+            element: <RequireAuth>{lazyComponent(<Enterprise />)}</RequireAuth>,
+          },
+          {
+            path: '/manage/individuality',
+            element: <RequireAuth>{lazyComponent(<Individuality />)}</RequireAuth>,
+          },
+        ],
       },
       {
         path: '/staff',

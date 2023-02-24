@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
-import HeadTop from '@/components/header';
+// import HeadTop from '@/components/header';
 
 const { Header, Content, Sider } = Layout;
 
@@ -13,7 +13,7 @@ const MainLayout: FC = () => {
           background: '#fff',
         }}
       >
-        <HeadTop />
+        {/* <HeadTop /> */}
       </Header>
       <Layout>
         <Sider width={200} style={{ background: '#FFF' }}>
