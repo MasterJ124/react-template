@@ -9,3 +9,8 @@ export async function getUserList(parameter: any): Promise<any> {
 export async function getUserCompanyList(parameter: any): Promise<any> {
   return $get('/user/company_list', parameter);
 }
+
+// 启用禁用成员
+export async function setMemberSwitch(parameter: any): Promise<any> {
+  return $post('/member/memberSwitch', parameter);
+}

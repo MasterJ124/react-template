@@ -14,7 +14,7 @@ import {
 } from 'antd';
 import { useState, useEffect } from 'react';
 import type { PaginationProps } from 'antd';
-import { getUserList, getUserCompanyList } from '@/api/user';
+import { getUserList, getUserCompanyList, setMemberSwitch } from '@/api/user';
 import { USER_STATUS } from '@/utils/config';
 
 const User: FC = () => {
@@ -90,8 +90,12 @@ const User: FC = () => {
       fixed: 'right',
       render: (text, record: any) => (
         <div>
-          {record.status === 0 && <a onClick={() => showModal(record.status, record.id)}>启用</a>}
-          {record.status === 1 && <a onClick={() => showModal(record.status, record.id)}>禁用</a>}
+          {record.status === 0 && (
+            <a onClick={() => showModal(record.status, record.user_id)}>启用</a>
+          )}
+          {record.status === 1 && (
+            <a onClick={() => showModal(record.status, record.user_id)}>禁用</a>
+          )}
         </div>
       ),
     },
@@ -155,15 +159,28 @@ const User: FC = () => {
 
   const handleOk = () => {
     setConfirmLoading(true);
-    setTimeout(() => {
-      setOpen(false);
-      messageApi.open({
-        type: 'success',
-        content: '接口开发中',
+    setMemberSwitch({
+      user_id: id,
+      switch: status === 1 ? 'disable' : 'enable',
+    })
+      .then((res) => {
+        if (res.code !== 0) {
+          messageApi.open({
+            type: 'error',
+            content: res.message,
+          });
+          return;
+        }
+        messageApi.open({
+          type: 'success',
+          content: '操作成功',
+        });
+        setOpen(false);
+        search(current, pageSize);
+      })
+      .finally(() => {
+        setConfirmLoading(false);
       });
-      search(current, pageSize);
-      setConfirmLoading(false);
-    }, 2000);
   };
 
   const handleCancel = () => {
