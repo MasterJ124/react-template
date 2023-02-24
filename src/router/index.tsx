@@ -11,7 +11,7 @@ import NoFoundPage from '@/pages/404';
 import Login from '@/pages/login';
 
 // page
-const Home = lazy(() => import('@/pages/home'));
+// const Home = lazy(() => import('@/pages/home'));
 const User = lazy(() => import('@/pages/user'));
 const Staff = lazy(() => import('@/pages/staff'));
 const Enterprise = lazy(() => import('@/pages/merchant/enterprise'));
@@ -23,14 +23,14 @@ const lazyComponent = (element: JSX.Element) => {
 };
 
 const routes = [
-  { path: '/', element: <Navigate to="/home" /> },
-  {
-    path: '/home',
-    element: lazyComponent(<Home />),
-  },
+  { path: '/', element: <Navigate to="/user" /> },
+  // {
+  //   path: '/home',
+  //   element: lazyComponent(<Home />),
+  // },
   {
     path: '/login',
-    element: lazyComponent(<Login />),
+    element: <RequireAuth>{lazyComponent(<Login />)}</RequireAuth>,
   },
   {
     path: '/',
