@@ -8,25 +8,21 @@ import { getUserInfo } from '@/api/login';
 
 // 获取用户信息
 export function fetchUserInfo() {
-  try {
-    const token = ls.get(ACCESS_TOKEN);
-    if (!token) return;
-    getUserInfo()
-      .then((res) => {
-        const { data, code, message } = res;
-        if (code !== 0) {
-          message.error(message);
-          return;
-        }
-        if (data?.company?.company_id) ls.set(COMPANY_ID, data.company.company_id);
-        store.dispatch(setUserInfo(data));
-      })
-      .catch((err) => {
-        message.error(err.message);
-      });
-  } catch (error) {
-    message.error('获取用户信息失败');
-  }
+  const token = ls.get(ACCESS_TOKEN);
+  if (!token) return;
+  getUserInfo()
+    .then((res) => {
+      const { data, code, message } = res;
+      if (code !== 0) {
+        message.error(message);
+        return;
+      }
+      if (data?.company?.company_id) ls.set(COMPANY_ID, data.company.company_id);
+      store.dispatch(setUserInfo(data));
+    })
+    .catch((err) => {
+      message.error(err.message);
+    });
 }
 // 清空用户信息
 export function clearUserInfo() {
