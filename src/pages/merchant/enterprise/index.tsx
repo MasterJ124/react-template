@@ -18,7 +18,10 @@ import type { PaginationProps } from 'antd';
 import { getMerchantList, setMerchantStatus } from '@/api/merchant';
 import { MERCHANT_TYPE, AUDIT_STATUS, MERCHANT_STATUS } from '@/utils/config';
 import ExamineModal from '../components/examineModal';
-
+import type { ColumnsType } from 'antd/es/table';
+interface DataType {
+  id: number;
+}
 const Enterprise: FC = () => {
   const [form] = Form.useForm();
   const [list, setList] = useState([]);
@@ -31,7 +34,7 @@ const Enterprise: FC = () => {
   const [id, setId] = useState(0);
   const [status, setStatus] = useState(0);
   const [checkModal, setCheckModal] = useState(false);
-  const columns = [
+  const columns: ColumnsType<DataType> = [
     {
       title: 'ID',
       dataIndex: 'id',
@@ -42,19 +45,19 @@ const Enterprise: FC = () => {
       title: '公司名称',
       key: 'title',
       width: 140,
-      render: (text, record: any) => <p>{record.company_info.title}</p>,
+      render: (_: any, record: any) => <p>{record.company_info.title}</p>,
     },
     {
       title: '统一社会信用代码',
       key: 'cert_code',
       width: 160,
-      render: (text, record: any) => <p>{record.company_info.cert_code}</p>,
+      render: (_: any, record: any) => <p>{record.company_info.cert_code}</p>,
     },
     {
       title: '审核状态',
       key: 'status',
       width: 100,
-      render: (text, record: any) => (
+      render: (_: any, record: any) => (
         <div>
           {record.status === 1 && <p className="pass">审核通过</p>}
           {record.status === 2 && <p className="reject">审核拒绝</p>}
@@ -66,7 +69,7 @@ const Enterprise: FC = () => {
       title: '商户状态',
       key: 'company_status',
       width: 100,
-      render: (text, record: any) => (
+      render: (_: any, record: any) => (
         <div>
           {record.company_info.status === 1 && <p className="pass">启用</p>}
           {record.company_info.status === 2 && <p className="reject">禁用</p>}
@@ -78,13 +81,13 @@ const Enterprise: FC = () => {
       title: '申请人用户名',
       key: 'nickname',
       width: 120,
-      render: (text, record: any) => <p>{record.operator_info.nickname}</p>,
+      render: (_: any, record: any) => <p>{record.operator_info.nickname}</p>,
     },
     {
       title: '营业期限',
       key: 'title',
       width: 200,
-      render: (text, record: any) => (
+      render: (_: any, record: any) => (
         <p>
           {record.company_info.company_end_at
             ? record.company_info.company_start_at + '-' + record.company_info.company_end_at
@@ -96,49 +99,49 @@ const Enterprise: FC = () => {
       title: '经营地址',
       key: 'address',
       width: 120,
-      render: (text, record: any) => <p>{record.company_info.address}</p>,
+      render: (_: any, record: any) => <p>{record.company_info.address}</p>,
     },
     {
       title: '法人',
       key: 'corporate_name',
       width: 80,
-      render: (text, record: any) => <p>{record.company_info.corporate_name}</p>,
+      render: (_: any, record: any) => <p>{record.company_info.corporate_name}</p>,
     },
     {
       title: '营业执照',
       key: 'license',
       width: 120,
-      render: (text, record: any) => <p>{record.company_info.license}</p>,
+      render: (_: any, record: any) => <p>{record.company_info.license}</p>,
     },
     {
       title: '法人证件照',
       key: 'corporate_identity_front',
       width: 120,
-      render: (text, record: any) => <p>{record.company_info.corporate_identity_front}</p>,
+      render: (_: any, record: any) => <p>{record.company_info.corporate_identity_front}</p>,
     },
     {
       title: '申请人手机号',
       key: 'phone',
       width: 130,
-      render: (text, record: any) => <p>{record.operator_info.phone}</p>,
+      render: (_: any, record: any) => <p>{record.operator_info.phone}</p>,
     },
     {
       title: '超管手机号',
       key: 'admin_info',
       width: 130,
-      render: (text, record: any) => <p>{record.admin_info.phone}</p>,
+      render: (_: any, record: any) => <p>{record.admin_info.phone}</p>,
     },
     {
       title: '申请时间',
       key: 'created_at',
       width: 160,
-      render: (text, record: any) => <p>{record.company_info.created_at}</p>,
+      render: (_: any, record: any) => <p>{record.company_info.created_at}</p>,
     },
     {
       title: '商户类型',
       key: 'type',
       width: 100,
-      render: (text, record: any) => (
+      render: (_: any, record: any) => (
         <div>
           {record.company_info.type === 1 && <p>MCN</p>}
           {record.company_info.type === 2 && <p>供应商</p>}
@@ -149,26 +152,26 @@ const Enterprise: FC = () => {
       title: '审核时间',
       key: 'audited_at',
       width: 160,
-      render: (text, record: any) => <p>{record.audited_at || '— —'}</p>,
+      render: (_: any, record: any) => <p>{record.audited_at || '— —'}</p>,
     },
     {
       title: '失败原因',
       key: 'reason',
       width: 120,
-      render: (text, record: any) => <p>{record.reason || '— —'}</p>,
+      render: (_: any, record: any) => <p>{record.reason || '— —'}</p>,
     },
     {
       title: '备注',
       key: 'remark',
       width: 120,
-      render: (text, record: any) => <p>{record.remark || '— —'}</p>,
+      render: (_: any, record: any) => <p>{record.remark || '— —'}</p>,
     },
     {
       title: '操作',
       key: 'opea',
       width: 80,
       fixed: 'right',
-      render: (text, record: any) => (
+      render: (_: any, record: any) => (
         <div>
           {record.status === 3 && <a onClick={() => checkFn(record.id)}>审核</a>}
           {record.status === 1 && record.company_info.status === 2 && (

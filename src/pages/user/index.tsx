@@ -16,7 +16,10 @@ import { useState, useEffect } from 'react';
 import type { PaginationProps } from 'antd';
 import { getUserList, getUserCompanyList, setMemberSwitch } from '@/api/user';
 import { USER_STATUS } from '@/utils/config';
-
+import type { ColumnsType } from 'antd/es/table';
+interface DataType {
+  id: number;
+}
 const User: FC = () => {
   const [form] = Form.useForm();
   const [list, setList] = useState([]);
@@ -29,7 +32,7 @@ const User: FC = () => {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [id, setId] = useState(0);
   const [status, setStatus] = useState(0);
-  const columns = [
+  const columns: ColumnsType<DataType> = [
     {
       title: 'ID',
       dataIndex: 'app_id',
@@ -70,7 +73,7 @@ const User: FC = () => {
       title: '状态',
       key: 'status',
       width: 120,
-      render: (text, record: any) => (
+      render: (_: any, record: any) => (
         <div>
           {record.status === 1 && <p>启用</p>}
           {record.status === 0 && <p>禁用</p>}
@@ -88,7 +91,7 @@ const User: FC = () => {
       key: 'opea',
       width: 80,
       fixed: 'right',
-      render: (text, record: any) => (
+      render: (_: any, record: any) => (
         <div>
           {record.status === 0 && (
             <a onClick={() => showModal(record.status, record.user_id)}>启用</a>
@@ -241,7 +244,7 @@ const User: FC = () => {
                 <Select
                   placeholder="请选择"
                   showSearch
-                  options={companyList.map((city) => ({
+                  options={companyList.map((city: any) => ({
                     label: city.company.title,
                     value: city.company.title,
                   }))}
