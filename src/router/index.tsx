@@ -11,6 +11,9 @@ import NoFoundPage from '@/pages/404';
 
 // page
 const Home = lazy(() => import('@/pages/home'));
+import Refs from '@/pages/ClassComponents/refs';
+import Form from '@/pages/ClassComponents/form';
+import Cycle from '@/pages/ClassComponents/cycle';
 
 // 上层加载
 const withLoadingComponent = (element: JSX.Element) => {
@@ -27,6 +30,18 @@ const routes = [
     path: '/',
     element: <MainLayout />,
     children: [
+      {
+        path: '/refs',
+        element: <Refs />,
+      },
+      {
+        path: '/form',
+        element: <Form />,
+      },
+      {
+        path: '/cycle',
+        element: <Cycle />,
+      },
       { path: '*', element: <Navigate to="/404" /> },
       {
         path: '/404',
