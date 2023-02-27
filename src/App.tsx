@@ -8,7 +8,6 @@ import { themeConfig } from '@/style/themeConfig';
 import 'dayjs/locale/zh-cn';
 import zhCN from 'antd/locale/zh_CN';
 import 'antd/dist/reset.css';
-import '@/style/common.less';
 
 dayjs.locale('zh-cn');
 
