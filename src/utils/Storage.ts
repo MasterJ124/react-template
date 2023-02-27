@@ -6,7 +6,7 @@ interface storageOptType {
 }
 
 const options = Object.assign({
-  namespace: 'MCN_MANAGE_', // key prefix
+  namespace: 'MCN-SUPPLIER_', // key prefix
   storage: 'localStorage', // storage name session, local, memory
   default_cache_time: 60 * 60 * 24 * 7,
   isEncrypt: false,

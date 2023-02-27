@@ -8,7 +8,7 @@ module.exports = merge(baseConfig, {
   // devtool: 'eval-cheap-module-source-map', // sourceMap调试
   devServer: {
     open: true,
-    port: 8888,
+    port: 8808,
     compress: false,
     hot: true,
     historyApiFallback: true,
