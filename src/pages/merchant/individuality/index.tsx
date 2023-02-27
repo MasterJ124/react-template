@@ -90,11 +90,7 @@ const Individuality: FC = () => {
       title: '经营地址',
       key: 'address',
       width: 160,
-      render: (_: any, record: any) => (
-        <Tooltip title={record.company_info.address}>
-          <p className="text-ellipsis2">{record.company_info.address}</p>
-        </Tooltip>
-      ),
+      render: (_: any, record: any) => <p>{record.company_info.address}</p>,
     },
     {
       title: '经营者姓名',
@@ -124,7 +120,11 @@ const Individuality: FC = () => {
       title: '经营范围',
       key: 'business_range',
       width: 120,
-      render: (_: any, record: any) => <p>{record.company_info.business_range}</p>,
+      render: (_: any, record: any) => (
+        <Tooltip title={record.company_info.business_range}>
+          <p className="text-ellipsis2">{record.company_info.business_range}</p>
+        </Tooltip>
+      ),
     },
     {
       title: '申请人用户名',
