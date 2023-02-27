@@ -1,0 +1,84 @@
+.commom {
+  .pass {
+    position: relative;
+    padding-left: 8px;
+  }
+
+  .pass::before {
+    position: absolute;
+    top: 7px;
+    left: -8px;
+    width: 8px;
+    height: 8px;
+    content: '';
+    background-color: rgba(47, 131, 255, 1);
+    border-radius: 50%;
+  }
+
+  .reject {
+    position: relative;
+    padding-left: 8px;
+  }
+
+  .reject::before {
+    position: absolute;
+    top: 7px;
+    left: -8px;
+    width: 8px;
+    height: 8px;
+    content: '';
+    background-color: rgba(255, 77, 79, 1);
+    border-radius: 50%;
+  }
+
+  .default {
+    position: relative;
+    padding-left: 8px;
+  }
+
+  .default::before {
+    position: absolute;
+    top: 7px;
+    left: -8px;
+    width: 8px;
+    height: 8px;
+    content: '';
+    background-color: rgba(255, 164, 53, 1);
+    border-radius: 50%;
+  }
+
+  .textEllipsis2 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    /* autoprefixer: off */
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    word-break: break-all;
+  }
+
+  .imgContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 300px;
+    min-height: 300px;
+
+    img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+  }
+
+  .open {
+    color: #2f83ff;
+  }
+
+  .close {
+    color: #ff4d4f;
+  }
+
+  .examine {
+    color: #ffa435;
+  }
+}
