@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import { useState } from 'react';
 import { Form, Input, Button, Row, Col, message, Modal } from 'antd';
 import logo from '@/assets/images/logo.png';
-import '@/pages/login/index.css';
+import styles from '@/pages/login/index.less';
 import { login, smsSend } from '@/api/login';
 import { ACCESS_TOKEN } from '@/utils/config';
 import { fetchUserInfo } from '@/utils/util';
@@ -97,90 +97,92 @@ const Login: FC = () => {
   };
 
   return (
-    <div className="login-container">
-      <div className="head">
-        <img src={logo} className="App-logo" alt="logo" width={224} />
-      </div>
-      <div className="content">
-        <div className="form-container">
-          <div className="tabs">
-            <a onClick={() => setCurrent(0)} className={current === 0 ? 'active' : ''}>
-              手机登录
-            </a>
-            <a onClick={() => setCurrent(1)} className={current === 1 ? 'active' : ''}>
-              密码登录
-            </a>
-          </div>
-          <Form onFinish={onFinish} form={form}>
-            {current === 0 && (
-              <div
-                style={{
-                  marginBottom: '24px',
-                }}
-              >
-                <Form.Item
-                  name="mobile"
-                  rules={[
-                    { required: true, message: '请输入手机号码' },
-                    ({ getFieldValue }) => ({
-                      validator(_, value) {
-                        if (!value || /^1\d{10}$/.test(value)) {
-                          return Promise.resolve();
-                        }
-                        return Promise.reject(new Error('手机号码格式错误'));
-                      },
-                    }),
-                  ]}
+    <div className={styles.loginContainer}>
+      <div className={styles.loginMain}>
+        <div className={styles.head}>
+          <img src={logo} alt="logo" width={224} />
+        </div>
+        <div className={styles.content}>
+          <div className={styles.formContainer}>
+            <div className={styles.tabs}>
+              <a onClick={() => setCurrent(0)} className={current === 0 ? 'active' : ''}>
+                手机登录
+              </a>
+              <a onClick={() => setCurrent(1)} className={current === 1 ? 'active' : ''}>
+                密码登录
+              </a>
+            </div>
+            <Form onFinish={onFinish} form={form}>
+              {current === 0 && (
+                <div
+                  style={{
+                    marginBottom: '24px',
+                  }}
                 >
-                  <Input size="large" placeholder="请输入您的手机号码" />
-                </Form.Item>
-                <Form.Item>
-                  <Row gutter={12}>
-                    <Col span={15}>
-                      <Form.Item
-                        name="captcha"
-                        rules={[{ required: true, message: '请输入验证码' }]}
-                      >
-                        <Input size="large" placeholder="验证码" />
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      {contextHolder}
-                      <Button
-                        size="large"
-                        onClick={() => getCode()}
-                        disabled={btnDisabled}
-                        style={{
-                          width: '112px',
-                        }}
-                      >
-                        {codeText}
-                      </Button>
-                    </Col>
-                  </Row>
-                </Form.Item>
-              </div>
-            )}
-            {current === 1 && (
-              <div
-                style={{
-                  marginBottom: '48px',
-                }}
-              >
-                <Form.Item name="user" rules={[{ required: true, message: '请输入账号' }]}>
-                  <Input size="large" placeholder="请输入您的账号" />
-                </Form.Item>
-                <Form.Item name="password" rules={[{ required: true, message: '请输入密码' }]}>
-                  <Input size="large" type="password" placeholder="输入您的密码" />
-                </Form.Item>
-              </div>
-            )}
-            <Form.Item>
-              <Button size="large" loading={loading} type="primary" htmlType="submit" block>
-                登录
-              </Button>
-            </Form.Item>
-          </Form>
+                  <Form.Item
+                    name="mobile"
+                    rules={[
+                      { required: true, message: '请输入手机号码' },
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (!value || /^1\d{10}$/.test(value)) {
+                            return Promise.resolve();
+                          }
+                          return Promise.reject(new Error('手机号码格式错误'));
+                        },
+                      }),
+                    ]}
+                  >
+                    <Input size="large" placeholder="请输入您的手机号码" />
+                  </Form.Item>
+                  <Form.Item>
+                    <Row gutter={12}>
+                      <Col span={15}>
+                        <Form.Item
+                          name="captcha"
+                          rules={[{ required: true, message: '请输入验证码' }]}
+                        >
+                          <Input size="large" placeholder="验证码" />
+                        </Form.Item>
+                      </Col>
+                      <Col span={8}>
+                        {contextHolder}
+                        <Button
+                          size="large"
+                          onClick={() => getCode()}
+                          disabled={btnDisabled}
+                          style={{
+                            width: '112px',
+                          }}
+                        >
+                          {codeText}
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Form.Item>
+                </div>
+              )}
+              {current === 1 && (
+                <div
+                  style={{
+                    marginBottom: '48px',
+                  }}
+                >
+                  <Form.Item name="user" rules={[{ required: true, message: '请输入账号' }]}>
+                    <Input size="large" placeholder="请输入您的账号" />
+                  </Form.Item>
+                  <Form.Item name="password" rules={[{ required: true, message: '请输入密码' }]}>
+                    <Input size="large" type="password" placeholder="输入您的密码" />
+                  </Form.Item>
+                </div>
+              )}
+              <Form.Item>
+                <Button size="large" loading={loading} type="primary" htmlType="submit" block>
+                  登录
+                </Button>
+              </Form.Item>
+            </Form>
+          </div>
         </div>
       </div>
     </div>

@@ -12,7 +12,7 @@ import {
   Card,
   Modal,
 } from 'antd';
-import '../merchant/index.css';
+import styles from '../merchant/index.less';
 import { useState, useEffect } from 'react';
 import type { PaginationProps } from 'antd';
 import { getUserList, getUserCompanyList, setMemberSwitch } from '@/api/user';
@@ -95,12 +95,12 @@ const User: FC = () => {
       render: (_: any, record: any) => (
         <div>
           {record.status === 0 && (
-            <a className="open" onClick={() => showModal(record.status, record.user_id)}>
+            <a className={styles.open} onClick={() => showModal(record.status, record.user_id)}>
               启用
             </a>
           )}
           {record.status === 1 && (
-            <a className="close" onClick={() => showModal(record.status, record.user_id)}>
+            <a className={styles.close} onClick={() => showModal(record.status, record.user_id)}>
               禁用
             </a>
           )}
@@ -199,7 +199,7 @@ const User: FC = () => {
     getUserCompanyListData();
   }, []);
   return (
-    <div className="user-container">
+    <div className={styles.commom}>
       <Card>
         <h4
           style={{

@@ -13,7 +13,7 @@ import {
   Modal,
 } from 'antd';
 import { useState, useEffect } from 'react';
-import '../index.css';
+import styles from '../index.less';
 import type { PaginationProps } from 'antd';
 import { getMerchantList, setMerchantStatus } from '@/api/merchant';
 import { MERCHANT_TYPE, AUDIT_STATUS, MERCHANT_STATUS } from '@/utils/config';
@@ -61,9 +61,9 @@ const Enterprise: FC = () => {
       width: 100,
       render: (_: any, record: any) => (
         <div>
-          {record.status === 1 && <p className="pass">审核通过</p>}
-          {record.status === 2 && <p className="reject">审核拒绝</p>}
-          {record.status === 3 && <p className="default">待审核</p>}
+          {record.status === 1 && <p className={styles.pass}>审核通过</p>}
+          {record.status === 2 && <p className={styles.reject}>审核拒绝</p>}
+          {record.status === 3 && <p className={styles.default}>待审核</p>}
         </div>
       ),
     },
@@ -73,8 +73,8 @@ const Enterprise: FC = () => {
       width: 100,
       render: (_: any, record: any) => (
         <div>
-          {record.company_info.status === 1 && <p className="pass">启用</p>}
-          {record.company_info.status === 2 && <p className="reject">禁用</p>}
+          {record.company_info.status === 1 && <p className={styles.pass}>启用</p>}
+          {record.company_info.status === 2 && <p className={styles.reject}>禁用</p>}
           {![1, 2].includes(record.company_info.status) && <p>— —</p>}
         </div>
       ),
@@ -202,17 +202,23 @@ const Enterprise: FC = () => {
       render: (_: any, record: any) => (
         <div>
           {record.status === 3 && (
-            <a className="examine" onClick={() => checkFn(record.id)}>
+            <a className={styles.examine} onClick={() => checkFn(record.id)}>
               审核
             </a>
           )}
           {record.status === 1 && record.company_info.status === 2 && (
-            <a className="open" onClick={() => showModal(record.company_info.status, record.id)}>
+            <a
+              className={styles.open}
+              onClick={() => showModal(record.company_info.status, record.id)}
+            >
               启用
             </a>
           )}
           {record.status === 1 && record.company_info.status === 1 && (
-            <a className="close" onClick={() => showModal(record.company_info.status, record.id)}>
+            <a
+              className={styles.close}
+              onClick={() => showModal(record.company_info.status, record.id)}
+            >
               禁用
             </a>
           )}
@@ -305,7 +311,7 @@ const Enterprise: FC = () => {
     search(current, pageSize);
   }, []);
   return (
-    <div className="user-container">
+    <div className={styles.commom}>
       <Card>
         <h4
           style={{
@@ -452,7 +458,7 @@ const Enterprise: FC = () => {
         </p>
       </Modal>
       <Modal open={imgVisible} onCancel={() => setImgVisible(false)} footer={null}>
-        <div className="img-container">
+        <div className={styles.imgContainer}>
           <img src={imgUrl} alt="" />
         </div>
       </Modal>
