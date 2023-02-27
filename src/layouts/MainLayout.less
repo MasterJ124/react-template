@@ -1,5 +1,6 @@
 .mainLayout {
   height: 100%;
+  overflow: hidden;
 
   .header {
     padding-inline: 24px;
@@ -14,9 +15,17 @@
 
   .layoutContent {
     padding: 16px 24px;
+    overflow: auto;
   }
 
   .content {
+    flex: none;
     min-height: 400px;
+  }
+
+  .footer {
+    font-size: 14px;
+    color: rgb(0 0 0 / 45%);
+    text-align: center;
   }
 }

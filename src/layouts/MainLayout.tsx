@@ -6,9 +6,11 @@ import SideMenu from '@/components/Menu';
 
 import styles from './MainLayout.less';
 
-const { Header, Content, Sider } = Layout;
+const { Header, Content, Footer, Sider } = Layout;
 
 const MainLayout: FC = () => {
+  const currentYear = new Date().getFullYear();
+
   return (
     <Layout className={styles.mainLayout}>
       <Header className={styles.header}>
@@ -22,6 +24,7 @@ const MainLayout: FC = () => {
           <Content className={styles.content}>
             <Outlet />
           </Content>
+          <Footer className={styles.footer}>©{currentYear} 乐推网络科技有限公司</Footer>
         </Layout>
       </Layout>
     </Layout>
