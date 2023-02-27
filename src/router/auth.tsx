@@ -6,10 +6,10 @@ function RequireAuth({ children }: { children: JSX.Element }) {
   const token = ls.get(ACCESS_TOKEN);
   const location = useLocation();
 
-  if (token && location.pathname.includes('/login')) {
+  if (location.pathname.includes('/login') && token) {
     // 登录页跳转验证
     return <Navigate to="/user" state={{ from: location }} replace />;
-  } else if (!token) {
+  } else if (!location.pathname.includes('/login') && !token) {
     // 验证登录
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
