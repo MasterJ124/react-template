@@ -1,19 +1,14 @@
-import logo from '@/assets/images/logo.png';
-import ls from '@/utils/Storage';
-import { USER_INFO } from '@/utils/config';
 import type { FC } from 'react';
+import logo from '@/assets/images/logo.png';
+import styles from './index.less';
+// 组件
+import AvatarDropdown from '@/components/AvatarDropdown';
+
 const Header: FC = () => {
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-      }}
-    >
-      <div>
-        <img src={logo} className="App-logo" alt="logo" width={224} />
-      </div>
-      <div></div>
+    <div className={styles.headerContainer}>
+      <img src={logo} className={styles.appLogo} alt="logo" />
+      <AvatarDropdown />
     </div>
   );
 };
