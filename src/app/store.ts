@@ -16,7 +16,7 @@ import userReducer from '@/features/userInfoSlice';
 
 // 持久化配置
 const persistConfig = {
-  key: 'MCN-SUPPLIER',
+  key: 'MCN_SUPPLIER',
   storage: storageSession,
 };
 

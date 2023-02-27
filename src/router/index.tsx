@@ -11,11 +11,7 @@ import NoFoundPage from '@/pages/404';
 import Login from '@/pages/login';
 
 // page
-// const Home = lazy(() => import('@/pages/home'));
-const User = lazy(() => import('@/pages/user'));
-const Staff = lazy(() => import('@/pages/staff'));
-const Enterprise = lazy(() => import('@/pages/merchant/enterprise'));
-const Individuality = lazy(() => import('@/pages/merchant/individuality'));
+const Home = lazy(() => import('@/pages/home'));
 
 // 上层加载
 const lazyComponent = (element: JSX.Element) => {
@@ -23,43 +19,19 @@ const lazyComponent = (element: JSX.Element) => {
 };
 
 export const routes = [
-  { path: '/', element: <Navigate to="/user" /> },
-  // {
-  //   path: '/home',
-  //   element: lazyComponent(<Home />),
-  // },
+  { path: '/', element: <Navigate to="/home" /> },
+  {
+    path: '/home',
+    element: lazyComponent(<Home />),
+  },
   {
     path: '/login',
-    element: lazyComponent(<Login />),
+    element: <RequireAuth>{lazyComponent(<Login />)}</RequireAuth>,
   },
   {
     path: '/',
     element: <MainLayout />,
     children: [
-      {
-        icon: '',
-        name: '用户管理',
-        path: '/user',
-        element: <RequireAuth>{lazyComponent(<User />)}</RequireAuth>,
-      },
-      {
-        path: '/manage',
-        children: [
-          {
-            index: true,
-            path: '/manage/enterprise',
-            element: <RequireAuth>{lazyComponent(<Enterprise />)}</RequireAuth>,
-          },
-          {
-            path: '/manage/individuality',
-            element: <RequireAuth>{lazyComponent(<Individuality />)}</RequireAuth>,
-          },
-        ],
-      },
-      {
-        path: '/staff',
-        element: <RequireAuth>{lazyComponent(<Staff />)}</RequireAuth>,
-      },
       { path: '*', element: <Navigate to="/404" /> },
       {
         path: '/404',
