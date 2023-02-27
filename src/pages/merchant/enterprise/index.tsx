@@ -13,7 +13,7 @@ import {
   Modal,
 } from 'antd';
 import { useState, useEffect } from 'react';
-import '../index.less';
+import '../index.css';
 import type { PaginationProps } from 'antd';
 import { getMerchantList, setMerchantStatus } from '@/api/merchant';
 import { MERCHANT_TYPE, AUDIT_STATUS, MERCHANT_STATUS } from '@/utils/config';
@@ -30,6 +30,8 @@ const Enterprise: FC = () => {
   const [current, setCurrent] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [open, setOpen] = useState(false);
+  const [imgVisible, setImgVisible] = useState(false);
+  const [imgUrl, setImgUrl] = useState('');
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [id, setId] = useState(0);
   const [status, setStatus] = useState(0);
@@ -114,7 +116,12 @@ const Enterprise: FC = () => {
       render: (_: any, record: any) => (
         <div>
           {record.company_info.license.includes('http') && (
-            <img src={record.company_info.license} alt="" width={80} />
+            <img
+              src={record.company_info.license}
+              onClick={() => showImgModal(record.company_info.license)}
+              alt=""
+              width={80}
+            />
           )}
           {!record.company_info.license.includes('http') && <p>{record.company_info.license}</p>}
         </div>
@@ -127,7 +134,12 @@ const Enterprise: FC = () => {
       render: (_: any, record: any) => (
         <div>
           {record.company_info.corporate_identity_front.includes('http') && (
-            <img src={record.company_info.license} alt="" width={80} />
+            <img
+              src={record.company_info.license}
+              onClick={() => showImgModal(record.company_info.license)}
+              alt=""
+              width={80}
+            />
           )}
           {!record.company_info.corporate_identity_front.includes('http') && (
             <p>{record.company_info.corporate_identity_front}</p>
@@ -248,6 +260,10 @@ const Enterprise: FC = () => {
     setId(id);
     setStatus(status);
     setOpen(true);
+  };
+  const showImgModal = (url: string) => {
+    setImgUrl(url);
+    setImgVisible(true);
   };
   const handleOk = () => {
     setConfirmLoading(true);
@@ -426,6 +442,11 @@ const Enterprise: FC = () => {
         >
           {status === 1 ? '禁用后该商户将不可访问管理中心，确认禁用？' : '确认启用该商户？'}
         </p>
+      </Modal>
+      <Modal open={imgVisible} onCancel={() => setImgVisible(false)} footer={null}>
+        <div className="img-container">
+          <img src={imgUrl} alt="" />
+        </div>
       </Modal>
       {checkModal && <ExamineModal id={id} cancel={cancel} />}
     </div>

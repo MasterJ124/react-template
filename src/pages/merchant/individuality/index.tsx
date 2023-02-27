@@ -11,9 +11,10 @@ import {
   Pagination,
   Card,
   Modal,
+  Tooltip,
 } from 'antd';
 import { useState, useEffect } from 'react';
-import '../index.less';
+import '../index.css';
 import type { PaginationProps } from 'antd';
 import { getMerchantList, setMerchantStatus } from '@/api/merchant';
 import { AUDIT_STATUS, MERCHANT_STATUS } from '@/utils/config';
@@ -30,6 +31,8 @@ const Individuality: FC = () => {
   const [current, setCurrent] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [open, setOpen] = useState(false);
+  const [imgVisible, setImgVisible] = useState(false);
+  const [imgUrl, setImgUrl] = useState('');
   const [checkModal, setCheckModal] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [id, setId] = useState(0);
@@ -86,8 +89,12 @@ const Individuality: FC = () => {
     {
       title: '经营地址',
       key: 'address',
-      width: 120,
-      render: (_: any, record: any) => <p>{record.company_info.address}</p>,
+      width: 160,
+      render: (_: any, record: any) => (
+        <Tooltip title={record.company_info.address}>
+          <p className="text-ellipsis2">{record.company_info.address}</p>
+        </Tooltip>
+      ),
     },
     {
       title: '经营者姓名',
@@ -102,7 +109,12 @@ const Individuality: FC = () => {
       render: (_: any, record: any) => (
         <div>
           {record.company_info.license.includes('http') && (
-            <img src={record.company_info.license} alt="" width={80} />
+            <img
+              src={record.company_info.license}
+              onClick={() => showImgModal(record.company_info.license)}
+              alt=""
+              width={80}
+            />
           )}
           {!record.company_info.license.includes('http') && <p>{record.company_info.license}</p>}
         </div>
@@ -225,6 +237,10 @@ const Individuality: FC = () => {
   const checkFn = (id: number) => {
     setId(id);
     setCheckModal(true);
+  };
+  const showImgModal = (url: string) => {
+    setImgUrl(url);
+    setImgVisible(true);
   };
   const cancel = () => {
     setCheckModal(false);
@@ -412,6 +428,11 @@ const Individuality: FC = () => {
         >
           {status === 1 ? '禁用后该商户将不可访问管理中心，确认禁用？' : '确认启用该商户？'}
         </p>
+      </Modal>
+      <Modal open={imgVisible} onCancel={() => setImgVisible(false)} footer={null}>
+        <div className="img-container">
+          <img src={imgUrl} alt="" />
+        </div>
       </Modal>
       {checkModal && <ExamineModal id={id} cancel={cancel} />}
     </div>
