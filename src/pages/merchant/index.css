@@ -59,3 +59,12 @@
   min-width: 300px;
   min-height: 300px;
 }
+.open {
+  color: #2f83ff;
+}
+.close {
+  color: #ff4d4f;
+}
+.examine {
+  color: #ffa435;
+}

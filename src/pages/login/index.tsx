@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import { useState } from 'react';
 import { Form, Input, Button, Row, Col, message, Modal } from 'antd';
 import logo from '@/assets/images/logo.png';
-import '@/pages/login/index.module.less';
+import '@/pages/login/index.css';
 import { login, smsSend } from '@/api/login';
 import { ACCESS_TOKEN } from '@/utils/config';
 import { fetchUserInfo } from '@/utils/util';

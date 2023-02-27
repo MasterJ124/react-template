@@ -30,7 +30,7 @@ export const routes = [
   // },
   {
     path: '/login',
-    element: <RequireAuth>{lazyComponent(<Login />)}</RequireAuth>,
+    element: lazyComponent(<Login />),
   },
   {
     path: '/',

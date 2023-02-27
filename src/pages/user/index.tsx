@@ -12,6 +12,7 @@ import {
   Card,
   Modal,
 } from 'antd';
+import '../merchant/index.css';
 import { useState, useEffect } from 'react';
 import type { PaginationProps } from 'antd';
 import { getUserList, getUserCompanyList, setMemberSwitch } from '@/api/user';
@@ -94,10 +95,14 @@ const User: FC = () => {
       render: (_: any, record: any) => (
         <div>
           {record.status === 0 && (
-            <a onClick={() => showModal(record.status, record.user_id)}>启用</a>
+            <a className="open" onClick={() => showModal(record.status, record.user_id)}>
+              启用
+            </a>
           )}
           {record.status === 1 && (
-            <a onClick={() => showModal(record.status, record.user_id)}>禁用</a>
+            <a className="close" onClick={() => showModal(record.status, record.user_id)}>
+              禁用
+            </a>
           )}
         </div>
       ),

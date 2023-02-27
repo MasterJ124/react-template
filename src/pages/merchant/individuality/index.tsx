@@ -187,12 +187,20 @@ const Individuality: FC = () => {
       fixed: 'right',
       render: (_: any, record: any) => (
         <div>
-          {record.status === 3 && <a onClick={() => checkFn(record.id)}>审核</a>}
+          {record.status === 3 && (
+            <a className="examine" onClick={() => checkFn(record.id)}>
+              审核
+            </a>
+          )}
           {record.status === 1 && record.company_info.status === 2 && (
-            <a onClick={() => showModal(record.company_info.status, record.id)}>启用</a>
+            <a className="open" onClick={() => showModal(record.company_info.status, record.id)}>
+              启用
+            </a>
           )}
           {record.status === 1 && record.company_info.status === 1 && (
-            <a onClick={() => showModal(record.company_info.status, record.id)}>禁用</a>
+            <a className="close" onClick={() => showModal(record.company_info.status, record.id)}>
+              禁用
+            </a>
           )}
         </div>
       ),
