@@ -6,11 +6,11 @@
 
   .pass::before {
     position: absolute;
-    left: -8px;
     top: 7px;
-    content: '';
+    left: -8px;
     width: 8px;
     height: 8px;
+    content: '';
     background-color: rgba(47, 131, 255, 1);
     border-radius: 50%;
   }
@@ -22,11 +22,11 @@
 
   .reject::before {
     position: absolute;
-    left: -8px;
     top: 7px;
-    content: '';
+    left: -8px;
     width: 8px;
     height: 8px;
+    content: '';
     background-color: rgba(255, 77, 79, 1);
     border-radius: 50%;
   }
@@ -38,11 +38,11 @@
 
   .default::before {
     position: absolute;
-    left: -8px;
     top: 7px;
-    content: '';
+    left: -8px;
     width: 8px;
     height: 8px;
+    content: '';
     background-color: rgba(255, 164, 53, 1);
     border-radius: 50%;
   }
@@ -59,12 +59,15 @@
 
   .imgContainer {
     display: flex;
-    justify-content: center;
     align-items: center;
-    max-width: 100%;
-    max-height: 100%;
+    justify-content: center;
     min-width: 300px;
     min-height: 300px;
+
+    img {
+      max-width: 100%;
+      max-height: 100%;
+    }
   }
 
   .open {
