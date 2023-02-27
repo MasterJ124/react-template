@@ -14,7 +14,7 @@ import {
   Modal,
 } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import styles from './index.module.less';
+import styles from './index.less';
 
 // api
 import { getMemberList, memberSwitch } from '@/api/staff';
