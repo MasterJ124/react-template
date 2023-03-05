@@ -14,6 +14,7 @@ const Home = lazy(() => import('@/pages/home'));
 import Refs from '@/pages/ClassComponents/refs';
 import Form from '@/pages/ClassComponents/form';
 import Cycle from '@/pages/ClassComponents/cycle';
+import Key from '@/pages/ClassComponents/key';
 
 // 上层加载
 const withLoadingComponent = (element: JSX.Element) => {
@@ -41,6 +42,10 @@ const routes = [
       {
         path: '/cycle',
         element: <Cycle />,
+      },
+      {
+        path: '/key',
+        element: <Key />,
       },
       { path: '*', element: <Navigate to="/404" /> },
       {
