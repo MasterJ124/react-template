@@ -1,8 +1,10 @@
 import axios, { AxiosRequestHeaders, AxiosResponse, AxiosError } from 'axios';
 import { notification } from 'antd';
-import { ACCESS_TOKEN } from './config';
+import { ACCESS_TOKEN, COMPANY_ID } from './config';
 import ls from './Storage';
 import { clearUserInfo } from './util';
+
+import { logout } from '@/api/login';
 
 // 创建 axios 实例   withCredentials: true,
 const service = axios.create({
@@ -10,7 +12,6 @@ const service = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
   timeout: 1000 * 60 * 3, // 请求超时时间
   responseType: 'json',
-  headers: {},
 });
 
 // 异常拦截处理器
@@ -42,10 +43,10 @@ service.interceptors.request.use((config) => {
       description: '请检查网络',
     });
   }
-  if (!config?.headers?.Authorization) {
-    const token = ls.get(ACCESS_TOKEN);
-    (config.headers as AxiosRequestHeaders)['X-Token'] = token;
-  }
+  const token = ls.get(ACCESS_TOKEN);
+  const cid = ls.get(COMPANY_ID);
+  if (token) (config.headers as AxiosRequestHeaders)['X-Token'] = token;
+  if (cid) (config.headers as AxiosRequestHeaders)['X-Cid'] = cid;
   return config;
 }, errorHandler);
 
@@ -62,6 +63,10 @@ service.interceptors.response.use((res: AxiosResponse<any>) => {
       description: '身份已失效，请重新登录',
     });
     // 登出操作
+    logout().then(() => {
+      clearUserInfo();
+      window.location.replace('/login');
+    });
   } else {
     hasExist = false;
   }
